@@ -1,0 +1,281 @@
+id,foreign_id,lat,lng,description,river,town,active
+11890,MPLECR01,41.575119,-96.790161,Maple Creek at North Bend (MPLECR01),Maple Creek,North Bend,t
+722,ENDWY01,40.727396,-94.979789,East Nodoway River at Hwy 2 at Clarinda (ENDWY01),East Nodaway River,Clarinda,t
+717,CLRCRK02,41.714222,-91.77911,Clear Creek at Chambers Ave NW at Oxford (CLRCRK02),Clear Creek,Oxford,t
+1979,POUDRERV01,40.629707,-105.168633,Cache la Poudre River at Bellvue (POUDRERV01),Cache la Poudre River,Bellvue,t
+1676,SOAPCR03,40.888095,-92.680712,Soap Creek at 313th Ave at Unionville (SOAPCR03),Soap Creek,Unionville,t
+1669,SKKMCHCK01,46.7722,-122.9236,Skookumchuck River at Centralia (SKKMCHCK01),Skookunchuck River,Centralia,f
+11893,TROUTCRK01,43.273853,-91.784668,Trout Creek at Decorah (TROUTCRK01),Trout Creek,Decorah,t
+1917,WATERMAN01,42.967774,-95.425321,Waterman Creek at Sutherland (WATERMAN01),Waterman Creek,Sutherland,t
+11892,SFELKHRN01,42.251301,-98.338531,South Fork Elkhorn River at Ewing (SFELKHRN01),South Fork Elkhorn River,Ewing,t
+1827,DSMNSRV03,42.12155,-93.967917,Des Moines River at Kale RD (DSMNSRV03),Des Moines River,Fraser,t
+11894,TROUTCRK02,43.252418,-91.807968,Trout Creek at Decorah (TROUTCRK02),Trout Creek,Decorah,t
+11856,WILLOWCR01,42.862312,-96.055969,Willow Creek at Oyens (WILLOWCR01),Willow Creek,Oyens,t
+11861,BUFFALO01,42.195779,-91.423147,Buffalo Creek at Prairieburg (BUFFALO01),Buffalo Creek,Prairieburg,t
+1884,SPRNGCRK01,43.284179,-92.769861,Spring Creek at Osage (SPRNGCRK01),Spring Creek,Osage,t
+11849,MUDCR03,42.079514,-92.113815,Mud Creek at Garrison (MUDCR03),Mud Creek,Garrison,t
+1915,CEDARCRK01,41.009739,-92.118781,Cedar Creek at Batavia (CEDARCRK01),Cedar Creek,Batavia,t
+1880,COONCR01,42.191457,-92.455621,Coon Creek at Traer(COONCR01),Coon Creek,Traer,t
+1756,YELLOWRV01,43.139539,-91.587033,Yellow River at Postville (YELLOWRV01),Yellow River,Postville,t
+1004,DEERCR01,41.6807,-91.6373,Deer Creek at Kansas Ave SW at Iowa City (DEERCR01),Deer Creek,Iowa City,t
+1812,MQKTARV01,42.260186,-91.192876,Maquoketa River at HWY38 (MQKTARV01),Maquoketa River,Monticello,t
+11871,SKNKRV01,40.936109,-91.618752,Skunk River at Mt. Pleasant (SKNKRV01),Skunk River,Mt. Pleasant,t
+1869,NORTHRV01,41.50804,-93.484974,North River at Carlisle (NORTHRV01),North River,Carlisle,t
+11852,IOWARV03,42.516972,-93.307808,Iowa RIver at Iowa Falls (IOWARV03),Iowa RIver,Iowa Falls,t
+1757,CEDARRV04,42.84742,-92.52211,Cedar River at Plainfield (CEDARRV04),Cedar River,Plainfield,t
+1025,SENGLSH01,41.4938,-91.9439,South English River at 120th St near Kinross (SENGLSH01),South English River,Kinross,t
+1021,PRICECR01,41.8051,-91.873,Price Creek at 42nd Ave at Amana Colonies (PRICECR01),Price Creek,Amana Colonies,f
+1829,NRCCNRV03,41.853271,-94.220369,North Raccoon River at  P46 (D AVE) (NRCCNRV03),North Raccoon River,Dawson,t
+11860,LTTLEWAPSI01,42.576321,-92.034271,Little Wapsipinicon River at Littleton (LTTLEWAPSI01),Little Wapsipinicon River,Littleton,t
+250902,UIWARV03,43.441306,-92.035944,Upper Iowa River near Kendallville,Upper Iowa River,Kendallville,t
+11864,BEARCR01,42.053177,-90.995806,Bear Creek at Wyoming (BEARCR01),Bear Creek,Wyoming,t
+1950,BEAR01,42.484337,-91.140491,Bear Creek at Dyersville (BEAR01),Bear Creek,Dyersville,t
+745,SLVRCR01,41.11745,-95.630947,Silver Creek at Dobney Ave at Silver City (SLVRCR01),Silver Creek,Silver City,t
+1885,VLGARV03,42.847289,-91.947762,Volga River at Sumner (VLGARV03),Volga River,Sumner,t
+719,CLRCRKS01,41.701175,-91.857469,Clear Creek Tributary at 210th St at Homestead (CLRCRKS01),Clear Creek Tributary,Homestead,t
+1036,WLNTCR02,41.6128,-93.7927,Walnut Creek at 128th St NW at Clive (WLNTCR02),Walnut Creek,Clive,t
+11867,CEDARRV05,43.283493,-92.85226,Cedar RIver at Osage (CEDARRV05),Cedar River,Osage,t
+1811,WAPSI05,42.203647,-91.527265,Wapsipinicon River at County E16/Main Street (WAPSI05),Wapsipinicon River,Central City,t
+11888,ELKHRNRV02,42.594074,-99.207901,Elkhorn River at Stuart (ELKHRNRV02),Elkhorn River,Stuart,f
+1002,CRANECR01,43.0015,-91.9691,Crane Creek at Spruce Rd at Hawkeye (CRANECR01),Crane Creek,Hawkeye,t
+1948,MQKTARV03,42.440655,-91.407078,Maquoketa River at Delhi (MQKTARV03),Maquoketa River,Delhi,t
+729,INDCR04,42.093797,-91.560844,Indian Creek at County Home Rd at Marion (INDCR04),Indian Creek,Marion,t
+1022,RAVENCR01,41.9646,-92.6702,Raven Creek at County E49 at Tama (RAVENCR01),Raven Creek,Tama,t
+1760,LTLSIOUX02,43.136752,-95.144196,Little Sioux River at Spencer (LTLSIOUX02),Little Sioux River,Spencer,t
+1023,RBRTSCR01,42.8741,-91.3827,Roberts Creek at Hwy 13 at Elkader (RBRTSCR01),Roberts Creek,Elkader,t
+750,TKYRV06,43.327275,-92.080278,Turkey River at 345th St at Cresco (TKYRV06),Turkey River,Cresco,t
+1778,OTTRCRK04,42.947141,-91.794949,Otter Creek at West Union (OTTRCRK04),Otter Creek,West Union,t
+11875,TKYRV05,43.241817,-91.990707,Turkey River at Spillville (TKYRV05),Turkey River,Spillville,t
+744,SHLRK07,43.284205,-93.123806,Shell Rock River at Hwy 9 at Plymouth (SHLRK07),Shell Rock River,Plymouth,t
+1842,BOYERRV02,41.810751,-95.640281,Boyer River at HWY30/Lincoln Highway (BOYERRV02),Boyer River,Dunlap,t
+1839,GENEVACR01,41.449146,-91.055379,Geneva Creek at Bidwell RD (GENEVACR01),Geneva Creek,Muscatine,t
+1907,HNYCRK01,42.5275,-91.4425,Honey Creek at Manchester(HNYCRK01),Honey Creek,Manchester,t
+1984,OTTRCREEK01,42.510357,-91.948975,Otter Creek at Otterville (OTTRCREEK01),Otter Creek,Otterville,t
+723,ENISH03,40.915696,-95.275368,East Nishnabotna River at 270th St at Coburg (ENISH03),East Nishnabotna River,Coburg,t
+11898,WELSHLAKE01,43.430665,-95.172421,Welsh Lake at Triboji Beach (WELSHLAKE01),Welsh Lake,Triboji Beach,t
+1024,SBVRCRK01,42.4125,-93.2611,South Beaver Creek at US HWY 65 at Owasa (SBVRCRK01),South Beaver Creek,Owasa,t
+11887,NFELKHRN02,42.351063,-97.617943,North Fork Elkhorn River at Osmond (NFELKHRN02),North Fork Elkhorn River,Osmond,t
+11851,UIWARV01,43.305006,-91.744897,Upper Iowa River at Freeport (UIWARV01),Upper Iowa River,Freeport,t
+716,CHSLSCR01,43.133826,-93.226035,Cheslea Creek at 19th St SW at Mason City (CHSLSCR01),Cheslea Creek,Mason City,t
+1653,SQWCR04,42.180817,-93.757788,Ioway Creek at 120th St at Story City (SQWCR04),Ioway Creek,Story City,t
+999,BFFLOCR02,41.7232,-91.6666,Buffalo Creek at James Ave NW at Tiffin (BFFLOCR02),Buffalo Creek,Tiffin,t
+1883,DRNGDTCH01,42.577661,-92.847178,Drainage Ditch at Aplington (DRNGDTCH01),Drainage Ditch,Aplington,t
+1814,ROGERSCR01,43.141718,-91.932728,Rogers Creek at HWY24 (ROGERSCR01),Rogers Creek,Fort Atkinson,t
+1989,SHLRK03,42.900684,-92.812714,Shell Rock at Greene (SHLRK03),Shell Rock,Greene,t
+11891,NFELKHRN01,42.01833,-97.387627,North Fork Elkhorn River at Norfolk (NFELKHRN01),North Fork Elkhorn River,Norfolk,t
+1001,CLRCRKW01,41.7166,-91.8907,Clear Creek at V Ave at Homestead (CLRCRKW01),Clear Creek,Homestead,t
+1014,MRGNCR01,41.9954,-91.7561,Morgan Creek at Covington Rd at Cedar Rapids (MRGNCR01),Morgan Creek,Cedar Rapids,f
+1026,SFIOWA01,42.4362,-93.3471,South Fork Iowa River at H Ave at Buckeye (SFIOWA01),South Fork Iowa River,Buckeye,f
+1848,MQKTARV05,42.577124,-91.54805,Maquoketa River at Richland ST/County W69 (MQKTARV05),Maquoketa River,Dundee,t
+1976,CDRCR01,41.118615,-92.938364,Cedar Creek at Lovilia (CDRCR01),Cedar Creek,Lovilia,t
+1921,WNISH01,40.686911,-95.600036,West Nishnabotna River at Riverton (WNISH01),West Nishnabotna River,Riverton,t
+1949,HEWITTCR01,42.485506,-91.10963,Hewitt Creek at Dyersville (HEWITTCR01),Hewitt Creek,Dyersville,t
+1019,OTTERCR01,42.0714,-91.7257,Otter Creek at Tower Terrace Rd at Hiawatha (OTTERCR01),Otter Creek,Hiawatha,t
+1820,ROCKCR02,43.284056,-92.926655,Rock Creek at HWY9 (ROCKCR02),Rock Creek,Osage,t
+11873,TKYRV04,43.14713,-91.930372,Turkey River at Ft. Atkinson (TKYRV04),Turkey River,Ft. Atkinson,t
+11853,NRCCNRV01,41.688393,-94.035011,North Raccoon River at Adel (NRCCNRV01),North Raccoon River,Adel,t
+1738,CEDARRV06,43.355409,-92.925178,Cedar River at St Ansgar (CEDARRV06),Cedar River,St. Ansgar,t
+721,EFDSMNS01,42.951322,-94.2335,East Fork Des Moines River at 130th St at Algona (EFDSMNS01),East Fork Des Moines River,Algona,t
+1003,DEEPCRK01,41.9622,-90.4685,Deep Creek at Broadway St at Charlotte (DEEPCRK01),Deep Creek,Charlotte,t
+250502,FLDCRK2505,42.86189,-92.698838,Flood Creek near Packard (FLDCRK2505),Flood Creek,Packard,t
+1909,CEDARRV02,41.845057,-91.390158,Cedar River at Sutliff (CEDARRV02) ,Cedar River,Sutliff,t
+11848,MUDCR02,42.101208,-92.066368,Mud Creek at Vinton (MUDCR02),Mud Creek,Vinton,t
+1749,INDIAN02,41.044804,-95.366453,Indian Creek at Emerson (INDIAN02),Indian Creek,Emerson,t
+11855,INDCRK01,41.284298,-95.836006,Indian Creek at Council Bluffs (INDCRK01),Indian Creek,Council Bluffs,t
+1953,WAPSI04,42.00897,-91.139147,Wapsipinicon River at Olin (WAPSI04),Wapsipinicon River,Olin,t
+743,SHLRK06,43.166203,-93.038048,Shell Rock River at 277th St at Nora Springs (SHLRK06),Shell Rock River,Nora Springs,t
+1865,BLCKHWK01,41.502715,-90.624221,Blackhawk Creek at Davenport (BLCKHWK01),Blackhawk Creek,Davenport,t
+746,SQWCR01,42.013553,-93.610153,Ioway Creek at S outh Duff Ave at Ames (SQWCR01),Ioway Creek,Ames,t
+1657,PRAIRIE01,42.121699,-93.755448,Prairie Creek at V Ave at Gilbert (PRAIRIE01),Prairie Creek,Gilbert,t
+1864,GRNGRCR01,42.4549,-90.6595,Granger Creek at Dubuque (GRNGRCR01),Granger Creek,Dubuque,t
+727,INDCR02,41.994834,-91.617753,Indian Creek at Cottage Grove Ave SE at Cedar Rapids (INDCR02),Indian Creek,Cedar Rapids,t
+1764,MAPLERV02,42.503756,-95.431959,Maple River at Galva (MAPLERV02),Maple River,Galva,t
+1039,LTLWAPSI01,43.112665,-92.40527,Little Wapsipinicon River at N Washington (LTLWAPSI01),Little Wapsipinicon River,North Washington,t
+1675,SOAPCR02,40.84952,-92.538281,Soap Creek at Falcon Boulevard at Drakesville (SOAPCR02),Soap Creek,Drakesville,t
+736,NRCCNRV04,42.457564,-95.012886,North Raccoon River at 230th St at Sac City (NRCCNRV04),North Raccoon River,Sac City,t
+1906,COFFINSCR01,42.495217,-91.562759,Coffins Creek at Masonville(COFFINSCR01),Coffins Creek,Masonville,t
+1866,DUCKCR02,41.549912,-90.551328,Duck Creek at Davenport (DUCKCR02),Duck Creek,Davenport,f
+742,SHLRK04,42.936283,-92.851475,Shell Rock River at 290th St at Marble Rock (SHLRK04),Shell Rock River,Marble Rock,t
+250901,UIWARV04,43.466738,-92.297739,Upper Iowa River near Lime Springs,Upper Iowa River,Lime Springs,t
+1674,LTLSOAP01,40.900895,-92.333087,Little Soap Creek at Quail Ave at Floris (LTLSOAP01),Little Soap Creek,Floris,t
+1913,EBRBVRDAM01,42.995719,-93.201867,East Branch Beaver Dam Creek at Rockwell (EBRBVRDAM01),East Branch Beaver Dam Creek,Rockwell,f
+1671,CHQSTCR01,40.772143,-92.092274,Chequest Creek at County V64 at Keosauqua (CHQSTCR01),Chequest Creek,Keosauqua,t
+1980,BOONERV01,42.724556,-93.947083,Boone River at Goldfield (BOONERV01),Boone River,Goldfield,t
+11886,ELKHRNRV01,42.432922,-98.598938,Elkhorn River at O''Neil (ELKHRNRV01),Elkhorn River,O''Neil,t
+1838,MADCRK01,41.451786,-91.038729,Mad Creek at HWY61/HWY22 (MADCRK01),Mad Creek,Muscatine,t
+720,DRYCR01,42.06214,-91.801492,Dry Creek at Covington Rd at Palo (DRYCR01),Dry Creek,Palo,t
+1034,CLRCRKS02,41.6865,-91.9113,Clear Creek Tributary at U Ave at Williamsburg (CLRCRKS02),Clear Creek Tributary,Williamsburg,t
+765,WNISH05,41.791686,-95.199,West Nishnabotna River at Cora St at Irwin (WNISH05),West Nishnabotna River,Irwin,t
+1038,PRICECR02,41.845468,-91.947936,Price Creek at S Ave At Amana Colonies (PRICECR02),Price Creek,Amana Colonies,t
+1777,OTTRCRK03,42.950064,-91.753865,Otter Creek at West Union (OTTRCRK03),Otter Creek,West Union,t
+11870,SKNKRV02,41.088511,-91.718473,Skunk River at Trenton (SKNKRV02),Skunk River,Trenton,t
+11885,PBBLECR01,41.641739,-96.634369,Pebble Creek at Schribner (PBBLECR01),Pebble Creek,Schribner,f
+749,TKYRV02,42.924405,-91.526782,Turkey River at Cable Ave at Elgin (TKYRV02),Turkey River,Elgin,t
+1947,WOLFCRK01,42.311653,-92.905076,Wolf Creek at Conrad (WOLFCRK01),Wolf Creek,Conrad,f
+11897,LOWERGAR01,43.340477,-95.131821,Lower Gar Lake at Milford (LOWERGAR01),Lower Gar Lake,Milford,f
+756,WLLWCR-IC01,41.640307,-91.560788,Willow Creek at Iowa City (WLLWCR-IC01),Willow Creek,Iowa City,t
+11859,BUCKCRK01,42.576191,-92.050308,Buck Creek at Littleton (BUCKCRK01),Buck Creek,Littleton,t
+1810,IOWARV01,41.554742,-91.518943,Iowa River at Hills (IOWARV01),Iowa River,Hills,t
+1037,FOURMLE03,41.769758,-93.589724,Fourmile Creek at 47th St NE at Ankeny (FOURMLE03),Fourmile Creek,Ankeny,t
+1041,LTLTKY02,43.183643,-92.164472,Little Turkey River at 120th St at Saude (LTLTKY02),Little Turkey River,Saude,t
+1825,MUDCRK01,41.599717,-93.411843,Mud Creek at HWY163 (NE 12th Ave.) (MUDCRK01),Mud Creek,Pleasant Hill,t
+1759,MDDLRCCN02,41.875301,-94.669845,Middle Raccoon River at Coon Rapids (MDDLRCCN02),Middle Raccoon River,Coon Rapids,t
+250101,CEDARRV2501,43.206805,-92.792791,Cedar River near Osage (CEDARRV2501),Cedar River,Osage,t
+11857,FLOYDRV01,42.721409,-96.240204,Floyd River at Merrill (FLOYDRV01),Floyd River,Merrill,t
+1853,BEAVER02,43.098201,-92.5402,Beaver Creek at Bassett (BEAVER02),Beaver Creek,Bassett,t
+1828,BEAVERCRK01,41.995981,-94.125602,Beaver Creek at P54 (C Ave.) (BEAVERCRK01),Beaver Creek,Beaver,t
+1758,MDDLRCCN01,41.590149,-94.20324,Middle Raccoon River at Redfield (MDDLRCCN01),Middle Raccoon River,Redfield,t
+1737,LTLCEDAR02,43.226619,-92.677493,Little Cedar River at Orchard (LTLCEDAR02),Little Cedar River,Orchard,t
+1813,NFMQKTA01,42.305968,-91.021465,North Fork Maquoketa River at HWY151 (NFMQKTA01),North Fork Maquoketa River,Cascade,t
+724,ENISH04,41.145514,-95.176348,East Nishnabotna River at 110th St at Elliott (ENISH04),East Nishnabotna River,Elliott,t
+1882,GRANCRK01,42.585214,-92.918055,Gran Creek at Aplington(GRANCRK01),Gran Creek,Aplington,f
+1881,LTLASHER01,42.159465,-92.90413,Little Asher Creek at Conrad (LTLASHER01),Little Asher Creek,Conrad,t
+1819,ROCKCR01,43.210351,-92.810228,"Rock Creek at Lancer Ave., Cty. T38 (ROCKCR01)",Rock Creek,Orchard,t
+995,BEARCRK01,42.0809,-91.809,Bear Creek at Hollenback Rd at Palo (BEARCRK01),Bear Creek,Palo,t
+1919,WLNTCR01,41.609738,-93.755504,Walnut Creek at Clive (WLNTCR01),Walnut Creek,Clive,t
+11877,MUDCREEK01,43.447468,-96.342079,Mud Creek at Lester (MUDCREEK01),Mud Creek,Lester,t
+731,KEGCR01,41.138551,-95.704489,Keg Creek at Barrus Rd Mineola (KEGCR01),Keg Creek,Mineola,t
+11879,CEDARRV01,41.669707,-91.155688,Cedar River at Rochester (CEDARRV01),Cedar River,Rochester,t
+11882,WNISH03,41.476631,-95.352936,West Nishnabotna River at Avoca (WNISH03),West Nishnabotna River,Avoca,t
+11866,EFWAPSI01,42.876523,-92.237085,East Fork Wapsipinicon River at Frederika (EFWAPSI01),East Fork Wapsipinicon River,Frederika,t
+1834,MSQUTOCR01,41.288149,-95.793194,Mosquito Creek at Yellow Pole RD (MSQUTOCR01),Mosquito Creek,Council Bluffs,t
+1736,LTLCEDAR01,42.957907,-92.518955,Little Cedar River at Nashua (LTLCEDAR01),Little Cedar River,Nashua,t
+997,BEVRCRK01,42.3609,-93.1395,Beaver Creek at Hwy 175 at Eldora (BEVRCRK01),Beaver Creek,Eldora,t
+1837,WAPSI02,41.829532,-90.811487,Wapsipinicon River at HWY30 (WAPSI02),Wapsipinicon River,Wheatland,f
+11874,WONDERCR01,43.201256,-91.97801,Wonder Creek at Spillville (WONDERCR01),Wonder Creek,Spillville,t
+1831,RCCNRV01,41.534407,-93.95032,Raccoon River at R16 (R AVE) (RCCNRV01),Raccoon River,Van Meter,t
+11847,DUCKCR01,41.5324,-90.4751,Duck Creek at Riverdale (DUCKCR01),Duck Creek,Riverdale,t
+748,SSKNK03,42.034248,-93.593944,South Skunk River at E 13th St at Ames (SSKNK03),South Skunk River,Ames,t
+726,INDCR01,41.976434,-91.57812,Indian Creek at Mt. Vernon Rd SE at Cedar Rapids (INDCR01),Indian Creek,Cedar Rapids,t
+1843,WBFLOYDRV01,42.923777,-96.177476,West Branch Floyd River at 500th ST (WBFLOYDRV01),West Branch Floyd River,Struble,t
+1751,NSKNK01,41.687869,-92.859233,North Skunk River at Kellogg (NSKNK01),North Skunk River,Kellogg,t
+1673,SOAPCR01,40.879966,-92.332873,Soap Creek at Quail Ave at Floris (SOAPCR01),Soap Creek,Floris,t
+1033,TKYRV03,42.9977,-91.6579,Turkey River at Mill St at Clermont (TKYRV03),Turkey River,Clermont,t
+1747,MDDLRCCN03,42.052492,-94.823041,Middle Raccoon River at Carroll (MDDLRCCN03),Middle Raccoon River,Carroll,t
+734,LTLWLNT01,41.633309,-93.833329,Little Walnut Creek at NW 156th St at Clive (LTLWLNT01),Little Walnut Creek,Clive,t
+1846,LTLSIOUX05,43.459518,-95.230817,Little Sioux at 130th ST (LTLSIOUX05),Little Sioux River,Montgomery,t
+1822,MCHKNCK01,41.288281,-92.69654,Muchakinock Creek at HWY92 (MCHKNCK01),Muchakinock Creek,Oskaloosa,f
+1010,HONEYCR01,41.9602,-90.4708,Honey Creek at 1st St at Charlotte (HONEYCR01),Honey Creek,Charlotte,t
+764,WNISH04,41.645388,-95.312665,West Nishnabotna River at Chatburn Ave at Harlan (WNISH04),West Nishnabotna River,Harlan,f
+11881,EBRWNISH01,41.476269,-95.330063,East Branch West Nishnabotna River at Avoca (EBRWNISH01),East Branch West Nishnabotna River,Avoca,t
+11880,WAPSI06,42.392502,-91.761879,Wapsipinicon River at Quasqueton (WAPSI06),Wapsipinicon River,Quasqueton,t
+1823,SPRINGCR01,41.551038,-93.446148,Spring Creek at SE 32nd Ave. (SPRINGCR01),Spring Creek,Pleasant Hill,t
+11889,UNIONCR01,41.8298,-97.363174,Union Creek at Madison (UNIONCR01),Union Creek,Madison,t
+11869,WFCEDAR01,42.704048,-92.888971,West Fork Cedar River at Kelsey (WFCEDAR01),West Fork Cedar River,Kelsey,t
+758,WNBGORV02,43.153329,-93.171056,Winnebago River at S Illinois Ave at Mason City (WNBGORV02),Winnebago River,Mason City,t
+1836,MAPLERV01,42.351117,-95.479425,Maple River at HWT59 (MAPLERV01),Maple River,Ida Grove,t
+250501,WFCEDARRV2505,42.802885,-93.035901,West Fork Cedar River near Aredale (WFCEDARRV2505),West Fork Cedar River,Aredale,t
+1826,DSMNSRV02,42.042768,-93.933207,"Des Moines River at E41 (Old HWY 30, Lincoln HWY) (DSMNSRV02)",Des Moines River,Boone,t
+996,BEVRCRK02,42.4553,-93.2233,Beaver Creek at 170th St at Owasa (BEVRCRK02),Beaver Creek,Owasa,t
+738,RHNCR01,41.722496,-91.790559,Rhine Creek at Augusta Ave at Oxford (RHNCR01),Rhine Creek,Oxford,t
+1763,WFLTLSIOUX01,42.492951,-96.075634,West Fork Little Sioux River at Moville (WFLTLSIOUX01),West Fork Little Sioux River,Moville,t
+1858,OTTRCRK02,42.928604,-91.696963,Otter Creek at Elgin (OTTRCRK02),Otter Creek,Elgin,t
+1835,MSQUTOCR02,41.46685,-95.603946,Mosquito Creek at Railroad HWY (MSQUTOCR02),Mosquito Creek,Neola,t
+1044,ELKRN01,42.498051,-92.252549,Elk Run Creek at Independence Ave at Waterloo (ELKRN01),Elk Run Creek,Waterloo,t
+1920,ENISH01,40.694728,-95.56248,East Nishnabotna River at Riverton (ENISH01),East Nishnabotna River,Riverton,t
+1042,NBEARCR01,42.275414,-91.985833,North Bear Creek at 51st St Dr at Brandon (NBEARCR01),North Bear Creek,Brandon,t
+1032,TRBLSM01,41.4611,-94.8872,Troublesome Creek at Troublesome Creek Rd at Lorah (TRBLSM01),Troublesome Creek,Lorah,t
+1011,HOOSRCR01,41.8715,-91.5882,Hoosier Creek at Vista Rd at Ely (HOOSRCR01),Hoosier Creek,Ely,t
+1031,TIPTNCR02,42.3683,-93.339,Tipton Creek at 230th St at Hubbard (TIPTNCR02),Tipton Creek,Hubbard,t
+714,BRSHYCR01,41.87696,-94.769562,Brushy Creek at 330th St at Dedham (BRSHYCR01),Brushy Creek,Dedham,t
+1663,ONIONCR01,42.053529,-93.698584,Onion Creek at N 500th Ave at Ames (ONIONCR01),Onion Creek,Ames,t
+757,WNBGORV01,43.121176,-93.1227,Winnebago River at Thrush Ave at Mason City (WNBGORV01),Winnebago River,Mason City,t
+1854,BRCKCMP01,43.133352,-91.889389,Brockcamp Creek at Festina (BRCKCMP01),Brockcamp Creek,Festina,t
+751,UIWARV02,43.34,-91.8339,Upper Iowa River at Bluffton Rd at Decorah (UIWARV02),Upper Iowa River,Decorah,t
+1761,FLOYDRV02,42.80027,-96.174569,Floyd River at Le Mars (FLOYDRV02),Floyd River,Le Mars,t
+1952,NFMQKTA02,42.482729,-91.123889,North Fork Maquoketa River at Dyersville (NFMQKTA02),North Fork Maquoketa River,Dyersville,t
+1650,NFCTFSH01,42.486343,-90.703606,North Fork Catfish Creek at Brunskill Road (NFCTFSH01),North Fork Catfish Creek,Dubuque,t
+1847,MADCRK02,41.478706,-91.019951,Mad Creek at 180th ST/County G14 (MADCRK02),Mad Creek,Muscatine,t
+1005,DRYCR02,42.0217,-91.8535,Dry Creek at 69th St at Atkins (DRYCR02),Dry Creek,Atkins,t
+11876,OCHYDNRV02,43.327991,-95.486053,Ocheyedan River at May City (OCHYDNRV02),Ocheyedan River,May City,t
+1916,WFCRKDCR01,41.281708,-91.715885,West Fork Crooked Creek at Washington (WFCRKDCR01),West Fork Crooked Creek,Washington,t
+1755,DRYRNCRK01,42.525179,-92.441413,Dry Run Creek at Cedar Falls (DRYRNCRK01),Dry Run Creek,Cedar Falls,t
+1739,CEDARRV07,43.499606,-93.001956,Cedar River at Ortranto (CEDARRV07),Cedar River,Ortranto,t
+1951,WAPSI03,41.971925,-90.960057,Wapsipinicon River at Oxford Mills (WAPSI03),Wapsipinicon River,Oxford Mills,t
+1832,SRCCNRV01,41.564102,-94.233173,South Raccoon River at Dexfield RD (SRCCNRV01),South Raccoon River,Redfield,t
+725,HRGVCR01,42.756143,-93.025721,Hargrave Creek at Franklin Ave at Dumont (HRGVCR01),Hargrave Creek,Dumont,t
+1818,SLOUGHCR01,43.206325,-92.732549,Slough Creek at HWY 218 (SLOUGHCR01),Slough Creek,Orchard,t
+1043,BLUECR01,42.202583,-91.824506,Blue Creek at Urbana Rd at Center Point (BLUECR01),Blue Creek,Center Point,t
+1745,LTLSIOUX01,42.74514,-95.551691,Little Sioux River at Cherokee (LTLSIOUX01),Little Sioux River,Cherokee,t
+998,BNNTTCR01,41.9529,-92.6492,Bennett Creek at G Ave at Tama (BNNTTCR01),Bennett Creek,Tama,t
+11868,SHLRK05,43.005372,-92.925499,Shell Rock River at Rockford (SHLRK05),Shell Rock River,Rockford,t
+747,SQWCR02,42.036626,-93.645004,Ioway Creek at Stange Rd at Ames (SQWCR02),Ioway Creek,Ames,t
+1981,BEARCREEK01,42.137245,-93.542191,Bear Creek at Roland (BEARCREEK01),Bear Creek,Roland,t
+1840,BRCHFLD01,41.7393,-94.395211,Burchfield Creek at Sage Trail (BRCHFLD01),Burchfield Creek,Panora,t
+1855,WLNTCRK01,41.984475,-91.17496,Walnut Creek at Olin (WLNTCRK01),Walnut Creek,Olin,t
+1946,DYECRK01,42.034149,-93.30967,Dye Creek at Colo (DYECRK01),Dye Creek,Colo,t
+1841,BOYERRV01,41.573223,-95.845234,Boyer River at County F58 (BOYERRV01),Boyer River,Missouri Valley,t
+1852,CLRCRK01,41.718254,-91.740208,Clear Creek at Oxford (CLRCRK01),Clear Creek,Oxford,t
+1845,WFKLTSIOUX01,43.419586,-95.269068,West Fork Little Sioux at 160th AVE (WFKLTSIOUX01),West Fork Little Sioux River,Lake Park,t
+1856,CTFSHCR01,42.467386,-90.682531,Catfish Creek at Dubuque (CTFSHCR01),Catfish Creek,Dubuque,t
+759,WNBGORV03,43.220065,-93.299808,Winnebago River at Killdeeer Ave at Mason City (WNBGORV03),Winnebago River,Mason City,t
+1815,PRAIRIECRK01,41.923208,-91.783714,Prairie Creek at HWY151 (PRAIRIECRK01),Prairie Creek,Fairfax,t
+1762,FLOYDRV03,43.185438,-95.868443,Floyd River at Sheldon (FLOYDRV03),Floyd River,Sheldon,t
+1015,MUDCR01,42.1547,-92.0057,Mud Creek at 61st St at Vinton (MUDCR01),Mud Creek,Vinton,t
+739,RLSTNCR01,41.661684,-91.522698,Ralston Creek at Governor St at Iowa City (RLSTNCR01),Ralston Creek,Iowa City,t
+1008,ENISH05,41.5117,-94.9359,East Nishnabotna River at 345th St at Brayton (ENISH05),East Nishnabotna River,Brayton,t
+1779,SCHQSTCR01,40.78279,-92.197807,South Chequest Creek at Bassett (SCHQSTCR01),South Chequest Creek,Troy,t
+1027,SFIOWA02,42.4527,-93.3846,South Fork Iowa River at Buckeye (SFIOWA02),South Fork Iowa River,Buckeye,t
+11872,DSMNSRV01,41.091633,-92.526501,Des Moines River at Chillicothe (DSMNSRV01),Des Moines River,Chillicothe,t
+1914,SKNKRV03,41.194987,-91.807469,Skunk River at Brighton (SKNKRV03),Skunk River,Brighton,t
+1000,BFFLOCR01,41.7123,-91.6995,Buffalo Creek at Hwy 6 at Tiffin (BFFLOCR01),Buffalo Creek,Tiffin,t
+1007,DRYCRK02,42.0947,-91.6381,Dry Creek at County Home Rd at Robins (DRYCRK02),Dry Creek,Robins,t
+1824,CAMPCR01,41.600519,-93.3653,Camp Creek at HWY 163 (NE 12th Ave.) (CAMPCR01),Camp Creek,Mitchellville,t
+760,WNBGORV04,43.263058,-93.418067,Winnebago River at Eagle Ave at Fertile (WNBGORV04),Winnebago River,Fertile,t
+1013,LTLTKY01,43.0089,-91.8694,Little Turkey River at Nature Rd at Eldorado (LTLTKY01),Little Turkey River,Eldorado,t
+1985,CRNECREEK01,42.576805,-92.180504,Crane Creek at Dunkerton (CRNECREEK01),Crane Creek,Dunkerton,t
+755,WLLWCR02,43.155786,-93.220835,Willow Creek at N Pierce Ave at Mason City (WLLWCR02),Willow Creek,Mason City,t
+11878,LTLROCK01,43.325237,-96.097099,Little Rock River at George (LTLROCK01),Little Rock River,George,t
+763,WNISH02,41.146319,-95.441864,West Nishnabotna River at Brothers Ave at Henderson (WNISH02),West Nishnabotna River,Henderson,t
+1012,LIMECR01,42.2974,-92.0177,Lime Creek at Benton-Buchanan Rd at Brandon (LIMECR01),Lime Creek,Brandon,t
+1652,SQWCR03,42.123027,-93.715057,Ioway Creek at 160th St at Gilbert (SQWCR03),Ioway Creek,Gilbert,t
+1750,LTLSIOUX04,43.327402,-95.201261,Little Sioux River at Milford (LTLSIOUX04),Little Sioux River,Milford,t
+1983,MNTGMRY01,42.13147,-93.756668,Montgomery Creek at Gilbert (MNTGMRY01),Montgomery Creek,Gilbert,t
+1874,SUGARCR01,40.784478,-91.571362,Sugar Creek at Houghton(SUGARCR01),Sugar Creek,Houghton,t
+1040,CRANECR02,43.213628,-92.27727,Crane Creek at 100th St at Jerico (CRANECR02),Crane Creek,Jerico,t
+11863,TKYRV01,42.73213,-91.159174,Turkey River at Osterdock (TKYRV01),Turkey River,Osterdock,t
+1918,MILLERCRK01,42.384512,-92.254363,Miller Creek at Washburn (MILLERCRK01),Miller Creek,Washburn,t
+1873,EINDNCR01,41.952123,-93.405982,East Indian Creek at Maxwell (EINDNCR01),East Indian Creek,Maxwell,t
+1867,SSKNK01,41.574715,-93.037189,South Skunk River at Reasnor (SSKNK01),South Skunk River,Reasnor,t
+1752,WALNUTCR01,41.501097,-93.251632,Walnut Creek at Runnells (WALNUTCR01),Walnut Creek,Runnells,t
+1868,FOURMLE01,41.568344,-93.522422,Fourmile Creek at Pleasant Hill (FOURMLE01),Fourmile Creek,Pleasant Hill,t
+11896,SPRNGRUN01,43.347488,-95.111778,Spring Run Creek at Arnolds Park (SPRNGRUN01),Spring Run Creek,Arnolds Park,t
+733,LTLSIOUX03,43.184268,-95.191472,Little Sioux River at 320th St at Spencer (LTLSIOUX03),Little Sioux River,Spencer,t
+754,WLLWCR01,43.150827,-93.20693,Willow Creek at 1st St SW at Mason City (WLLWCR01),Willow Creek,Mason City,t
+1833,ENISH02,40.785763,-95.384914,East Nishnabotna at HWY59 at Shenandoah (ENISH02),East Nishnabotna River,Shenandoah,t
+762,WNBGORV06,43.342286,-93.630953,Winnebago River at 400th St at Leland (WNBGORV06),Winnebago River,Leland,t
+737,NWLNTCR02,41.614686,-93.72652,North Walnut Creek at Hickman Rd at Urbandale (NWLNTCR02),North Walnut Creek,Urbandale,t
+1672,CHQSTCR02,40.804359,-92.2077,Chequest Creek at Wheat Ave at Keosauqua (CHQSTCR02),Chequest Creek,Keosauqua,t
+11865,KITTYCRK01,42.188927,-91.22265,Kitty Creek at Langworthy (KITTYCRK01),Kitty Creek,Langworthy,t
+715,BVRCR01,42.581216,-92.73164,Beaver Creek at Sinclair Ave at Parkersburg (BVRCR01),Beaver Creek,Parkersburg,t
+1029,SSKNK04,42.2171,-93.583,South Skunk River at Christytown Rd at Randall (SSKNK04),South Skunk River,Randall,t
+1830,NRCCNRV02,41.742571,-94.055925,North Raccoon River at Minburn RD (NRCCNRV02),North Raccoon River,Minburn,t
+11884,BOYERRV03,42.065647,-95.344322,Boyer River at Denison (BOYERRV03),Boyer River,Denison,t
+761,WNBGORV05,43.241974,-93.624887,Winnebago River at 330th St at Forest City (WNBGORV05),Winnebago River,Forest City,t
+1982,LNGDCKCR01,42.188076,-93.532417,Long Dick Creek at Roland (LNGDCKCR01),Long Dick Creek,Roland,t
+1776,BEAVER03,43.133878,-92.567574,Beaver Creek at Colwell (BEAVER03),Beaver Creek,Colwell,t
+730,INDIAN01,41.016893,-95.396478,Indian Creek at Morton Ave at Emersen (INDIAN01),Indian Creek,Emerson,t
+1016,MDCRK01,41.0986,-95.517,Mud Creek at Elderberry Ave at Henderson (MDCRK01),Mud Creek,Henderson,t
+1821,DSMNSRV04,42.543403,-94.216311,Des Moines River at 170th St. (Cty. D14) (DSMNSRV04),Des Moines River,Fort Dodge,t
+1028,SFIOWA03,42.5139,-93.4697,South Fork Iowa River at County D20 at Alden (SFIOWA03),South Fork Iowa River,Alden,t
+1844,OCHYDNRV01,43.183955,-95.374806,Ocheyedan River at HWY18/320th ST (OCHYDNRV01),Ocheyedan River,Everly,t
+11854,MILLCRK01,42.837395,-95.599655,Mill Creek at Larrabee (MILLCRK01),Mill Creek,Larrabee,t
+1009,FOURMLE02,41.6584,-93.5457,Fourmile Creek at 54th Ave NE at Altoona (FOURMLE02),Fourmile Creek,Altoona,t
+11858,WAPSI07,42.569286,-92.107964,Wapsipinicon River at Dunkerton (WAPSI07),Wapsipinicon River,Dunkerton,t
+741,SHLRK02,42.840339,-92.73205,Shell Rock River at Packard Ave at Clarksville (SHLRK02),Shell Rock River,Clarksville,t
+1006,DRYCRK01,42.0477,-91.6665,Dry Creek at Boyson Rd NE at Cedar Rapids (DRYCRK01),Dry Creek,Cedar Rapids,t
+732,LAKECR01,42.260551,-94.782407,Lake Creek at 365th St at Lake City (LAKECR01),Lake Creek,Lake City,t
+718,CLRCRK03,41.730501,-91.907046,Clear Creek at 190th St at Homestead (CLRCRK03),Clear Creek,Homestead,t
+1020,OTTRCRK01,42.9564,-91.6266,Otter Creek at Mill St at Elgin (OTTRCRK01),Otter Creek,Elgin,t
+11899,BIGSPIRIT01,43.445946,-95.096199,Big Spirit Lake Spillway at Orleans (BIGSPIRIT01),Big Spirit Lake Spillway,Orleans,t
+1018,NWLNTCR01,41.6092,-93.721,North Walnut Creek at College Ave at Windsor Heights (NWLNTCR01),North Walnut Creek,Windsor Heights,t
+11862,NFMQKTA03,42.546433,-91.114294,North Fork Maquoketa River at New Vienna (NFMQKTA03),North Fork Maquoketa River,New Vienna,t
+1035,VLGARV01,42.8015,-91.5372,Volga River at Domino Rd at Volga (VLGARV01),Volga River,Volga,t
+752,VLGARV02,42.837939,-91.656859,Volga River at South Mill St at Wadena (VLGARV02),Volga River,Wadena,t
+1775,BEAVER01,43.066578,-92.528143,Beaver Creek at Bassett (BEAVER01),Beaver Creek,Bassett,t
+11895,TROUTTRB01,43.23441,-91.77253,Trout Creek Tributary at Nordness (TROUTTRB01),Trout Creek Tributary,Nordness,t
+740,SHLRK01,42.788201,-92.688598,Shell Rock River at 180th St at Clarksville (SHLRK01),Shell Rock River,Clarksville,t
+1030,TIPTNCR01,42.314,-93.232,Tipton Creek at N Ave at Hubbard (TIPTNCR01),Tipton Creek,Hubbard,t
+753,WLFCR01,42.315598,-92.193895,Wolf Creek at W Main St at La Porte City (WLFCR01),Wolf Creek,La Porte City,t
+735,MQKTARV02,42.390771,-91.2909,Maquoketa River at Quarter Rd at Delhi (MQKTARV02),Maquoketa River,Delhi,t
+11850,MUDCR04,42.094112,-92.167595,Mud Creek at Garrison (MUDCR04),Mud Creek,Garrison,t
