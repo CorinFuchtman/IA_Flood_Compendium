@@ -1,1 +1,26 @@
 zipped_data/
+
+# Python bytecode cache
+__pycache__/
+*.pyc
+
+# Flood-wizard pipeline: large/regeneratable data caches -- see the .py
+# scripts in AFinal/locations/ to rebuild any of these locally.
+AFinal/locations/sensor_data_wy2021_2025/
+AFinal/locations/mrms_hour_cache/
+AFinal/locations/episodes/
+AFinal/locations/hwm_archive.csv
+AFinal/locations/*.log
+AFinal/locations/*_log.txt
+
+# Superseded preview/exploration artifacts (replaced by choropleth/wizard.html)
+AFinal/locations/choropleth/preview_*.html
+AFinal/locations/choropleth/sensors_by_huc8.geojson
+AFinal/locations/choropleth/sensors_by_county.geojson
+AFinal/locations/choropleth/sensor_points.geojson
+AFinal/locations/choropleth/embedded_episode_data.b64.txt
+
+# Pre-session pipeline (11) test outputs -- regenerate via the notebook
+AFinal/locations/episode_191899_0_all_outputs.zip
+AFinal/locations/episode_191899_0_inundation_layers.gpkg
+AFinal/locations/episode_191899_0_mrms_precip_total.tif

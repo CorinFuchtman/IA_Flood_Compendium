@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "wizard-preview",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8743", "--directory", "C:/Users/cfuchtman/Desktop/IA_Flood_Compendium/AFinal/locations/choropleth"],
+      "port": 8743
+    }
+  ]
+}
