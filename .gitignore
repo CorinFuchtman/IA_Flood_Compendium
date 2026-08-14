@@ -8,10 +8,14 @@ __pycache__/
 # scripts in AFinal/locations/ to rebuild any of these locally.
 AFinal/locations/sensor_data_wy2021_2025/
 AFinal/locations/mrms_hour_cache/
+AFinal/locations/flash_ari_hour_cache/
 AFinal/locations/episodes/
 AFinal/locations/hwm_archive.csv
 AFinal/locations/*.log
 AFinal/locations/*_log.txt
+
+# FLASH ARI raw data pulled manually from RMA's site (see episode_rma_extract.py)
+AFinal/locations/rma_cause_of_loss/raw/
 
 # Superseded preview/exploration artifacts (replaced by choropleth/wizard.html)
 AFinal/locations/choropleth/preview_*.html
