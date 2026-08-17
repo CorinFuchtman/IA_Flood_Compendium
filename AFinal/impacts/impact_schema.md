@@ -73,6 +73,17 @@ that produced it and a link back to its source.
   named street; treat `geom_type = event_point` records as within-county
   locations unless `location_raw` names a road you can match.
 
+## Quality audit
+
+First audit (2026-08-17, random sample of 24 records, seed 42, GroundSource
+rubric, see `data/quality_audit.csv`): 19 Accurate, 4 Approximate, 1 Wrong,
+so 96 percent Accurate or Approximate. The one Wrong record was a river-crest
+sentence typed as road_flooded because "Railroad Bridge" matched the road
+pattern; the extractor was fixed (railroad is now excluded) and that record is
+no longer produced. The Approximate cases are town-level "documented flooding"
+statements recorded as road_flooded with confidence B, and one stranded-vehicle
+report typed as rescue. Repeat the audit with a fresh seed before each release.
+
 ## Intended use
 
 The impact layer supports the compendium's purpose: flood modeling experiments

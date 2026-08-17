@@ -48,7 +48,7 @@ episode_id,n_impacts_total,n_impacts_noaa,n_impacts_crowd,has_crowdsource,max_se
 179278_0,0,0,0,False,0,,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 179281_0,0,0,0,False,0,,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 179459_0,3,3,0,False,2,road_closed;road_flooded,2,2,1,0,0,0,0,0,0,0,0,0,0,0
-179763_0,9,9,0,False,2,infrastructure;river_overbank,5,0,0,0,0,0,0,0,0,4,0,0,5,0
+179763_0,16,9,7,True,2,infrastructure;river_overbank;road_flooded,6,3,0,0,0,0,0,0,0,6,0,0,7,0
 179763_1,4,4,0,False,0,river_overbank,4,0,0,0,0,0,0,0,0,0,0,0,4,0
 180146_0,3,3,0,False,2,agriculture;infrastructure;road_closed,1,0,1,0,0,0,0,0,1,1,0,0,0,0
 180664_0,0,0,0,False,0,,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -99,7 +99,7 @@ episode_id,n_impacts_total,n_impacts_noaa,n_impacts_crowd,has_crowdsource,max_se
 194668_0,2,2,0,False,2,road_closed,2,0,2,0,0,0,0,0,0,0,0,0,0,0
 194837_0,0,0,0,False,0,,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 194840_0,1,1,0,False,0,river_overbank,1,0,0,0,0,0,0,0,0,0,0,0,1,0
-194931_0,8,8,0,False,2,infrastructure;river_overbank;road_flooded,5,1,0,0,0,0,0,0,0,2,0,0,5,0
+194931_0,7,7,0,False,2,infrastructure;river_overbank,5,0,0,0,0,0,0,0,0,2,0,0,5,0
 194931_1,5,5,0,False,2,infrastructure;river_overbank,3,0,0,0,0,0,0,0,0,2,0,0,3,0
 195054_0,1,1,0,False,1,road_flooded,1,1,0,0,0,0,0,0,0,0,0,0,0,0
 195125_0,1,1,0,False,1,road_flooded,1,1,0,0,0,0,0,0,0,0,0,0,0,0

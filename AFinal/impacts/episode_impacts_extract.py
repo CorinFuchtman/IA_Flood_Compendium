@@ -58,14 +58,14 @@ RULES: list[tuple[str, re.Pattern, int]] = [
         r"bridge.{0,60}(washed out|damage|closed|impassable|out of service)|"
         r"(washed out|damage to).{0,40}bridge", re.I), 2),
     ("road_closed", re.compile(
-        r"(road|street|highway|hwy|avenue|intersection|lane|us \d+|ia \d+|"
+        r"((?<!rail)road|street|highway|hwy|avenue|intersection|lane|us \d+|ia \d+|"
         r"interstate)[^.]{0,80}(closed|closure|barricad|impassable|"
-        r"washed out|shut down)|closed?[^.]{0,50}(road|street|highway|due to "
+        r"washed out|shut down)|closed?[^.]{0,50}((?<!rail)road|street|highway|due to "
         r"(flood|high )?water)", re.I), 2),
     ("road_flooded", re.compile(
         r"(water[^.]{0,60}(over|across|covering|covered|on) [^.]{0,50}"
-        r"(road|street|highway|hwy|avenue|intersection|viaduct|underpass)|"
-        r"(road|roads|street|streets|highway|intersection|underpass|viaduct)"
+        r"((?<!rail)road|street|highway|hwy|avenue|intersection|viaduct|underpass)|"
+        r"((?<!rail)road|(?<!rail)roads|street|streets|highway|intersection|underpass|viaduct)"
         r"[^.]{0,60}(flood|inundat|under ?water|covered (by|in|with) water|"
         r"water covered))", re.I), 1),
     ("home_flooded", re.compile(

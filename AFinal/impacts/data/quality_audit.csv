@@ -1,0 +1,25 @@
+audit_date,sample_seed,impact_id_prefix,impact_type,source,verdict,note
+2026-08-17,42,fddf64bd,road_flooded,noaa_narrative,Wrong,"River-crest sentence misclassified as road_flooded because 'Railroad Bridge' matched the road pattern. Extractor fixed (negative lookbehind for 'rail'); record no longer produced."
+2026-08-17,42,f887acd0,river_overbank,noaa_narrative,Accurate,Major flood stage crest at Muscatine supported verbatim
+2026-08-17,42,36a92e15,road_closed,noaa_narrative,Accurate,240th St to 265th Ave closure stated verbatim
+2026-08-17,42,6abdbf98,river_overbank,noaa_narrative,Accurate,Turkey River out of banks in Elkader
+2026-08-17,42,af468b0a,road_flooded,noaa_narrative,Accurate,IA 57 water over road between T19 and T25
+2026-08-17,42,a1aee78b,road_flooded,noaa_narrative,Accurate,Water over Yarrow Avenue near 410th Street
+2026-08-17,42,9d7c4ea7,river_overbank,noaa_narrative,Accurate,South Skunk River crest at Ames with stages and times
+2026-08-17,42,71d7b78b,river_overbank,noaa_narrative,Accurate,Crest 11.24 ft with timing
+2026-08-17,42,843a2b7e,evacuation,noaa_narrative,Accurate,Moon Creek flooding at Rock Rapids caused evacuations
+2026-08-17,42,79379893,river_overbank,noaa_narrative,Accurate,Minor flood crest 13.48 ft
+2026-08-17,42,ff18e867,river_overbank,noaa_narrative,Accurate,Creeks out of banks with water over Highway 16
+2026-08-17,42,3910db1c,road_flooded,noaa_narrative,Accurate,Highway 60 flooded by a couple feet of flowing water
+2026-08-17,42,244162aa,river_overbank,noaa_narrative,Accurate,Mississippi at Burlington above major flood stage
+2026-08-17,42,7c574f30,river_overbank,noaa_narrative,Accurate,Minor flood crest with timing
+2026-08-17,42,e4e98395,river_overbank,noaa_narrative,Accurate,Moderate flood crest with timing
+2026-08-17,42,ab14e588,road_flooded,noaa_narrative,Accurate,Water and debris over Highway 150
+2026-08-17,42,16d9dc03,river_overbank,noaa_narrative,Accurate,Moderate flood crest with timing
+2026-08-17,42,ceb2aea4,rescue,noaa_narrative,Approximate,"Text states stranded vehicles at closed intersections; explicit rescue action not stated, type slightly overstated"
+2026-08-17,42,92b09afc,road_flooded,local_news,Approximate,"Town listed with documented flooding; road-level detail inferred, confidence B already flags it"
+2026-08-17,42,58d5af9f,river_overbank,agency_web,Accurate,Duck Creek and Goose Creek out of banks at named streets
+2026-08-17,42,29562655,evacuation,agency_web,Accurate,Homes flooded in Kellogg with evacuations
+2026-08-17,42,efb12e3e,road_flooded,agency_web,Approximate,"Town listed with documented flooding; road-level detail inferred, confidence B"
+2026-08-17,42,7e9782b3,road_flooded,agency_web,Approximate,"Widespread flooding in Hawarden stated; street specificity inferred, confidence B"
+2026-08-17,42,0a8c54b4,river_overbank,agency_web,Accurate,Record crest 15.47 ft at Emmetsburg

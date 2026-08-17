@@ -1764,6 +1764,35 @@ document.getElementById('lb-modal-download').addEventListener('click', (e) => {
     recompute = function () { origRecompute(); renderImpacts(); };
   } catch (e) { console.warn('impacts addon: recompute wrap failed', e); }
 
+  /* ---------- impacts.csv inside per-episode download ZIPs ---------- */
+  function impactsCsvFor(epId) {
+    var ep = eps[epId];
+    if (!ep || !ep.impact_points || !ep.impact_points.length) return null;
+    var q = function (v) {
+      v = String(v == null ? '' : v);
+      return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+    };
+    var rows = ['impact_type,severity,source_type,date,lat,lon,location,text,source_url'];
+    ep.impact_points.forEach(function (p) {
+      rows.push([p.t, p.sv, p.src, p.dt, p.lat, p.lon, p.d, p.tx || '', p.u || 'NOAA Storm Events narrative']
+        .map(q).join(','));
+    });
+    return rows.join('\n');
+  }
+  try {
+    if (typeof addEpisodeToZip === 'function') {
+      var origAddZip = addEpisodeToZip;
+      addEpisodeToZip = function (zip, episodeId, granularity, episodeData) {
+        var r = origAddZip(zip, episodeId, granularity, episodeData);
+        try {
+          var csv = impactsCsvFor(episodeId);
+          if (csv) zip.file('episode_' + episodeId + '/impacts.csv', csv);
+        } catch (e) { console.warn('impacts addon: zip append failed', e); }
+        return r;
+      };
+    }
+  } catch (e) { console.warn('impacts addon: download wrap failed', e); }
+
   /* ---------- listeners ---------- */
   document.getElementById('impacts-show').addEventListener('change',
     function () { showImpacts = this.checked; renderImpacts(); });

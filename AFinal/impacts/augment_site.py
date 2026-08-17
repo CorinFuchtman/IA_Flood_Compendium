@@ -131,14 +131,17 @@ def patch_docs(points, counts) -> None:
 
 def patch_builder() -> None:
     src = BUILDER.read_text(encoding="utf-8")
-    if MARKER in src:
-        print("build_wizard_html.py already contains the add-on")
-        return
     addon = f"{MARKER}\n<script>\n{ADDON.read_text(encoding='utf-8')}\n</script>\n"
-    idx = src.rindex("</body>")
-    src = src[:idx] + addon + src[idx:]
+    if MARKER in src:
+        # replace the previous injection so add-on updates propagate
+        pre, _, rest = src.partition(MARKER)
+        _, _, tail = rest.partition("</script>\n")
+        src = pre + addon + tail
+    else:
+        idx = src.rindex("</body>")
+        src = src[:idx] + addon + src[idx:]
     BUILDER.write_text(src, encoding="utf-8")
-    print("build_wizard_html.py template patched")
+    print("build_wizard_html.py template patched (add-on current)")
 
 
 def main() -> None:
