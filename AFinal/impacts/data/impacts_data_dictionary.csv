@@ -1,0 +1,30 @@
+column,type,definition,allowed_values
+impact_id,text (UUID),Stable unique identifier (uuid5 of source and content),
+episode_id,text,Compendium NEW_EPISODE_ID the record belongs to; blank if no episode matched,
+event_id,integer or blank,NOAA EVENT_ID when the record comes from one storm event,
+source_dataset,text,Which compendium file the row came from,noaa | news
+source_type,text,Kind of source text,noaa_narrative | local_news | agency_web
+source_ref,text,NOAA event reference or article URL,
+pub_date,date,Publication date of the source (news only),YYYY-MM-DD
+start_date,date,First day the impact was observed,YYYY-MM-DD
+end_date,date,Last day the impact was observed,YYYY-MM-DD
+date_precision,text,How precisely the dates are known,day | range | month
+location_name,text,"Canonical place (City, County, IA)",
+location_raw,text,Verbatim location words incl. street names,
+lat,real,WGS84 latitude of the record point,
+lon,real,WGS84 longitude of the record point,
+geom_type,text,What the point represents,event_point | place_centroid | county_centroid
+admin_fips,text (5 chars),County FIPS; every record resolves at least to a county,
+huc8,text,HUC8 watershed when known,
+impact_type,text,Controlled impact vocabulary,road_flooded | road_closed | bridge_damaged | rescue | evacuation | home_flooded | business_flooded | agriculture | infrastructure | injury | fatality | river_overbank | other
+quantity,real or blank,"Number stated in the source (homes, people, feet, cfs)",
+quantity_unit,text,Unit for quantity,
+severity,integer 0-3,"0 overbank only, 1 minor, 2 moderate, 3 major",0 | 1 | 2 | 3
+confidence,text,A explicit and precisely located; B degraded precision; C single uncorroborated or inferred,A | B | C
+flood_type,text,Flood process,flash | river | pluvial | unknown
+mention_count,integer,Matching sentences (NOAA records); 1 for news,
+text_span,text,Verbatim sentence supporting the record,
+notes,text,"Discrepancies, corroboration, proxies used",
+episode_begin,date,First day of the parent episode (from NOAA events),YYYY-MM-DD
+episode_end,date,Last day of the parent episode,YYYY-MM-DD
+episode_counties,text,"Counties in the parent episode, semicolon separated",

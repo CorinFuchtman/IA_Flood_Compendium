@@ -23,28 +23,44 @@ reports, then download per-episode data bundles.
 | Social vulnerability | CDC/ATSDR SVI 2022, county level | `svi_iowa_county_2022.csv` |
 | Flood impact reports | NOAA narratives + local news mined with large language models; geo-referenced records of flooded and closed streets, rescues, evacuations, flooded homes | `AFinal/impacts/` |
 
-## The impacts layer (new)
+## The impacts layer
 
 `AFinal/impacts/` turns unstructured text into structured, auditable impact
 records, following GroundSource (news to flood data with large language
 models) and HANZE (curated flood impact database) practice. See
 `AFinal/impacts/impact_schema.md` for the full schema, controlled vocabulary,
-inclusion rules, and known biases.
+inclusion rules, and known biases. Current coverage: 562 records (417 NOAA
+narrative + 145 news/agency), 104 of 135 episodes with impact records, 33
+episodes with crowdsourced reports, 135 sources logged.
 
-* `data/impacts_noaa.csv` and `.geojson`: 418 records mined from NOAA event
-  narratives with documented regex rules (98 of 135 episodes). Reproducible:
+* `data/impacts_noaa.csv` and `.geojson`: records mined from NOAA event
+  narratives with documented regex rules. Reproducible:
   `python AFinal/impacts/episode_impacts_extract.py`.
 * `data/impacts_news.csv` and `.geojson`: records extracted from local news
   and agency event summaries with large language models, using the published
   prompt in `news_extraction_prompt.md`. Every article consulted is logged in
-  `data/sources_news.csv`, including rejected and unreachable ones.
+  `data/sources_news.csv`, including rejected and unreachable ones, and every
+  per-episode source hunt is logged in `data/search_log.csv` so "searched,
+  nothing found" episodes are separated from "not yet searched".
+* `data/impacts_master.csv` and `.geojson` (+ `impacts_data_dictionary.csv`):
+  the database-ready union of both sources with episode metadata joined.
+  Load it directly, e.g. DuckDB `SELECT * FROM
+  read_csv_auto('impacts_master.csv')` or SQLite `.import --csv
+  impacts_master.csv impacts`.
 * `data/episode_impact_index.csv`: one row per episode with counts by source
   and impact type, max severity, and a `has_crowdsource` flag. This is the
   quick filter table: episodes with crowdsourced impact data are the best
   candidates for street-scale model evaluation case studies.
+* `data/episode_source_leads.csv`: the student worksheet - one row per
+  episode with prebuilt search links and a status column (todo / searched /
+  covered) so coverage work is a checklist, not archaeology.
+* `validate_impacts.py`: schema validation gate; `data/quality_audit.csv`:
+  seeded audit rounds (currently 97 percent Accurate or Approximate).
 * `augment_site.py` embeds the records in the website and adds the "Flood
-  impact reports" panel: a map layer colored by severity plus two filters
-  (only episodes with crowdsourced reports, minimum impact records).
+  impact reports" panel: a severity-colored map layer, one-click preset chips
+  (All, Crowdsourced, Street-level, Severe), impact-type toggles, live
+  result counts, and a minimum-records slider. Per-episode download ZIPs
+  include `impacts.csv`.
 
 Episodes without crowdsourced data stay in the compendium. The impact layer
 is a filter and an evaluation target, not an inclusion criterion.
@@ -61,7 +77,9 @@ Run order (from `AFinal/locations/` unless noted):
    `choropleth_data.py` (support layers)
 3. `mrms_hour_cache.py` (rainfall grids; large download)
 4. `../impacts/episode_impacts_extract.py`, `../impacts/build_news_impacts.py`,
-   `../impacts/build_impact_index.py` (impact records)
+   `../impacts/build_impact_index.py`, `../impacts/build_master_impacts.py`,
+   `../impacts/validate_impacts.py`, `../impacts/generate_source_leads.py`
+   (impact records, master dataset, validation, student worksheet)
 5. `build_wizard_data.py` then `build_embedded_episode_data.py` then
    `build_wizard_html.py` (site build)
 6. `../impacts/augment_site.py` (adds the impacts layer to the built site and

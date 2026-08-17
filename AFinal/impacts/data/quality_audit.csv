@@ -23,3 +23,15 @@ audit_date,sample_seed,impact_id_prefix,impact_type,source,verdict,note
 2026-08-17,42,efb12e3e,road_flooded,agency_web,Approximate,"Town listed with documented flooding; road-level detail inferred, confidence B"
 2026-08-17,42,7e9782b3,road_flooded,agency_web,Approximate,"Widespread flooding in Hawarden stated; street specificity inferred, confidence B"
 2026-08-17,42,0a8c54b4,river_overbank,agency_web,Accurate,Record crest 15.47 ft at Emmetsburg
+2026-08-17,43,ee6dbb08,business_flooded,local_news,Accurate,Verbatim: 'water reached the main level of up to 30 businesses in Rock Rapids'. Article undated on page but URL slug carries 2024-07-23; event anchored to corroborated June 21-22 flood.
+2026-08-17,43,4199dc5e,other,local_news,Accurate,Verbatim ban sentence confirmed; pub 2024-07-04.
+2026-08-17,43,6d413fca,road_closed,agency_web,Accurate,Verbatim closure sentence and six-county travel-discouraged list confirmed on Iowa DOT page.
+2026-08-17,43,ba5952b6,road_flooded,local_news,Accurate,Verbatim 'deep water on 1st Avenue and 40th Street' attributed to Marion; pub 2025-08-11 for Aug 10 event.
+2026-08-17,43,1adad9ef,river_overbank,local_news,Approximate,"All fragments verbatim (18.4 ft, minor flooding occurring) but the page prints no date; dates inferred from day-of-week pattern. Confidence C already flags this."
+2026-08-17,43,dd07831f,infrastructure,local_news,Accurate,Verbatim overwhelmed-sewers sentence; pub 2024-06-22 confirmed.
+2026-08-17,43,de9acdaa,bridge_damaged,local_news,Accurate,Verbatim two-bridges sentence; Dubuque County; record 4.8 in rain at Dubuque Regional Airport confirmed.
+2026-08-17,43,cced4530,business_flooded,local_news,Accurate,Verbatim church-basement fragment; pub 2025-07-21 for Jul 19-20 event.
+2026-08-17,43,739b997e,infrastructure,local_news,Accurate,Verbatim water-supply sentence. Pub date corrected 2024-06-23 -> 2024-06-22 during this audit.
+2026-08-17,43,900b0dd6,river_overbank,local_news,Accurate,"Verbatim Whitewater Creek flooding fragment; county-level record, confidence B."
+2026-08-17,43,713932bd,river_overbank,agency_web,Accurate,"NWS LSR confirms creek out of banks along Center Point Road and I-380 with photos, Apr 20 2025."
+2026-08-17,43,f7104aca,other,agency_web,Accurate,Verbatim bank-collapses/destroyed-docks fragment; release date 2024-07-03 confirmed.

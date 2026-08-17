@@ -8,7 +8,9 @@ news_extraction_prompt.md to anything found, append the results to
 news_extractions_raw.json, and re-run the pipeline.
 
 Sorted by priority score (event count + damage) so the biggest uncovered
-episodes come first.
+episodes come first. Status per episode: "todo" (never searched), "searched"
+(source hunt done, no usable coverage found - see data/search_log.csv), and
+"covered" (crowdsourced records exist).
 """
 from __future__ import annotations
 
@@ -23,6 +25,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
 NOAA_CSV = REPO / "AFinal" / "locations" / "noaa_21-25_with_huc_08.csv"
 INDEX_CSV = HERE / "data" / "episode_impact_index.csv"
+SEARCH_LOG = HERE / "data" / "search_log.csv"
 OUT = HERE / "data" / "episode_source_leads.csv"
 
 MONTHS = ["", "January", "February", "March", "April", "May", "June", "July",
@@ -41,6 +44,9 @@ def main() -> None:
         df.DAMAGE_CROPS.map(parse_damage)
     df["b"] = pd.to_datetime(df.BEGIN_DATE_TIME)
     idx = pd.read_csv(INDEX_CSV).set_index("episode_id")
+    searched = set()
+    if SEARCH_LOG.exists():
+        searched = set(pd.read_csv(SEARCH_LOG).episode_id)
 
     rows = []
     for eid, sub in df.groupby("NEW_EPISODE_ID"):
@@ -68,6 +74,7 @@ def main() -> None:
             "n_impacts_noaa": int(meta.n_impacts_noaa) if meta is not None else 0,
             "n_impacts_crowd": int(meta.n_impacts_crowd) if meta is not None else 0,
             "status": ("covered" if meta is not None and meta.has_crowdsource
+                       else "searched" if eid in searched
                        else "todo"),
             "priority": round(len(sub) + sub.dmg.sum() / 1e6
                               + 50 * sub.DEATHS_DIRECT.sum(), 1),
@@ -76,15 +83,16 @@ def main() -> None:
             "suggested_query": q,
         })
 
-    rows.sort(key=lambda r: (-{"todo": 1, "covered": 0}[r["status"]],
+    rows.sort(key=lambda r: (-{"todo": 2, "searched": 1, "covered": 0}[r["status"]],
                              -r["priority"]))
     with OUT.open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()
         w.writerows(rows)
-    n_todo = sum(1 for r in rows if r["status"] == "todo")
-    print(f"{len(rows)} episodes -> {OUT.name} "
-          f"({n_todo} todo, {len(rows) - n_todo} covered)")
+    n = {s: sum(1 for r in rows if r["status"] == s)
+         for s in ("todo", "searched", "covered")}
+    print(f"{len(rows)} episodes -> {OUT.name} ({n['todo']} todo, "
+          f"{n['searched']} searched w/o coverage, {n['covered']} covered)")
 
 
 if __name__ == "__main__":

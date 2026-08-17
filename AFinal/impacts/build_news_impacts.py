@@ -12,7 +12,12 @@ Steps
 2. Assign episode_id by spatiotemporal match against the compendium episode
    table (date windows padded +/- 2 days, county overlap) - the same
    intersection + overlap rule GroundSource uses to cross-match databases.
-3. Emit CSV + GeoJSON in the shared impact schema (impact_schema.md).
+   Overlapping candidates are tie-broken toward the most specific episode
+   (unpadded-window overlap first, then narrowest window, then most NOAA
+   events in the record's county).
+3. Emit CSV + GeoJSON in the shared impact schema (impact_schema.md), plus
+   sources_news.csv (every article consulted) and search_log.csv (per-episode
+   outcome of each source-hunting round).
 """
 from __future__ import annotations
 
@@ -60,6 +65,18 @@ FALLBACK_PLACES: dict[str, tuple[float, float]] = {
     "CEDAR FALLS": (42.5274, -92.4453), "MARSHALLTOWN": (42.0494, -92.9080),
     "CAMANCHE": (41.7880, -90.2560), "BELLEVUE": (42.2584, -90.4229),
     "PLEASANT VALLEY": (41.5750, -90.4180),
+    # round 4 additions (city-center approximations, gazetteer preferred)
+    "HARTLEY": (43.1794, -95.4775), "SPIRIT LAKE": (43.4222, -95.1022),
+    "MUSCATINE": (41.4245, -91.0432), "THORNBURG": (41.4556, -92.3357),
+    "CORALVILLE": (41.6764, -91.5805),
+    "UNIVERSITY HEIGHTS": (41.6550, -91.5568),
+    "IOWA CITY": (41.6611, -91.5302), "HUXLEY": (41.8947, -93.6008),
+    "LINN GROVE": (42.8908, -95.2436), "BURLINGTON": (40.8075, -91.1129),
+    "PEOSTA": (42.4508, -90.8515), "MARION": (42.0345, -91.5977),
+    "WASHINGTON": (41.2992, -91.6929), "AINSWORTH": (41.2892, -91.5527),
+    "DONNELLSON": (40.6447, -91.5638), "FORT MADISON": (40.6298, -91.3157),
+    "MONTROSE": (40.5311, -91.4171), "CEDAR RAPIDS": (41.9779, -91.6656),
+    "HIAWATHA": (42.0356, -91.6822), "ALTON": (42.9875, -96.0106),
 }
 
 
@@ -114,6 +131,11 @@ def main() -> None:
     episodes = noaa.groupby("NEW_EPISODE_ID").agg(
         b=("b", "min"), e=("e", "max"),
         fips=("fips", lambda s: set(s))).reset_index()
+    # compare on whole days: record dates are day-precision midnights
+    episodes["b"] = episodes.b.dt.normalize()
+    episodes["e"] = episodes.e.dt.normalize()
+    county_event_counts = (noaa.groupby(["NEW_EPISODE_ID", "fips"]).size()
+                           .to_dict())
 
     gaz = load_gazetteer()
     ccent = county_centroids()
@@ -142,9 +164,25 @@ def main() -> None:
         s1 = pd.Timestamp(rec["end_date"])
         match = episodes[(episodes.b - pad <= s1) & (episodes.e + pad >= s0)
                          & episodes.fips.map(lambda f: fips in f)]
-        episode_id = match.NEW_EPISODE_ID.iloc[0] if len(match) else ""
-        if len(match) > 1:  # prefer the episode with most events in county
-            episode_id = match.NEW_EPISODE_ID.iloc[0]
+        episode_id = ""
+        if len(match):
+            # Tie-break for overlapping episodes (e.g. a regional episode and
+            # a local one covering the same days): prefer (1) episodes whose
+            # UNPADDED window overlaps the record dates, (2) the narrowest
+            # window (most specific episode), (3) the one with most NOAA
+            # events in the record's county, (4) episode_id for determinism.
+            def rank(m):
+                unpadded = (m.b <= s1) and (m.e >= s0)
+                days = (m.e - m.b).days
+                n_cty = county_event_counts.get((m.NEW_EPISODE_ID, fips), 0)
+                return (0 if unpadded else 1, days, -n_cty, m.NEW_EPISODE_ID)
+            best = min(match.itertuples(index=False), key=rank)
+            episode_id = best.NEW_EPISODE_ID
+            hint = rec.get("episode_hint", "")
+            if hint and hint != episode_id:
+                print(f"note: assigned {episode_id} (hint was {hint}) for "
+                      f"{rec['impact_type']} @ {rec.get('city') or county} "
+                      f"{rec['start_date']}")
 
         loc_name = (f"{city}, {county.title()} County, IA" if city
                     else f"{county.title()} County, IA")
@@ -199,6 +237,21 @@ def main() -> None:
                                           "url", "pub_date", "status", "note"])
         w.writeheader()
         w.writerows(raw["sources"])
+
+    # Per-episode search log: which episodes have been hunted for sources and
+    # with what outcome (sources_found / no_coverage). Lets the source-leads
+    # worksheet distinguish "searched, nothing found" from "not yet searched".
+    log = raw.get("search_log", [])
+    if log:
+        with (HERE / "data" / "search_log.csv").open(
+                "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=["episode_id", "searched_on",
+                                              "outcome", "note"])
+            w.writeheader()
+            w.writerows({k: e.get(k, "") for k in
+                         ("episode_id", "searched_on", "outcome", "note")}
+                        for e in log)
+        print(f"{len(log)} search-log entries -> search_log.csv")
 
     n_matched = sum(1 for r in records if r["episode_id"])
     print(f"{len(records)} news/agency impact records "

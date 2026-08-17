@@ -45,10 +45,18 @@ def load_impact_points() -> tuple[dict, dict]:
         for r in sub.itertuples(index=False):
             desc = r.location_raw if isinstance(r.location_raw, str) \
                 and r.location_raw else r.location_name
+            qty = ""
+            if pd.notna(r.quantity) and str(r.quantity).strip():
+                qty = str(r.quantity).rstrip("0").rstrip(".") \
+                    if "." in str(r.quantity) else str(r.quantity)
+                unit = str(r.quantity_unit) if pd.notna(r.quantity_unit) else ""
+                qty = (qty + " " + unit).strip()
             pts.append({
                 "lat": r.lat, "lon": r.lon, "t": r.impact_type,
                 "sv": int(r.severity), "src": r.source_type,
                 "d": str(desc)[:160], "dt": r.start_date,
+                "q": qty[:40],
+                "cf": str(r.confidence) if pd.notna(r.confidence) else "",
                 "tx": str(r.text_span)[:220] if isinstance(r.text_span, str)
                       else "",
                 "u": r.source_ref if r.source_type in ("local_news",

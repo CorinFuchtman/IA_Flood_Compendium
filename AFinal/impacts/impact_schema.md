@@ -15,16 +15,21 @@ that produced it and a link back to its source.
 | File | Content |
 |---|---|
 | `data/impacts_noaa.csv` / `.geojson` | Impacts mined from NOAA Storm Events narratives (rule based, reproducible, run `episode_impacts_extract.py`) |
-| `data/impacts_news.csv` / `.geojson` | Impacts mined from local news coverage with large language models (see `news_extraction_prompt.md`) |
-| `data/sources_news.csv` | Registry of every news article consulted (URL, outlet, publication date, episode) |
+| `data/impacts_news.csv` / `.geojson` | Impacts mined from local news and agency coverage with large language models (see `news_extraction_prompt.md`) |
+| `data/impacts_master.csv` / `.geojson` | Database-ready union of both sources with episode metadata joined (run `build_master_impacts.py`); load this into DuckDB/SQLite/PostGIS |
+| `data/impacts_data_dictionary.csv` | Column-by-column dictionary for the master table (type, definition, allowed values) |
+| `data/sources_news.csv` | Registry of every news article consulted, including rejected and unreachable ones (URL, outlet, publication date, status) |
+| `data/search_log.csv` | Per-episode outcome of each source-hunting round (sources_found / no_coverage), so searched-but-empty episodes are not re-searched |
 | `data/episode_impact_index.csv` | Per-episode rollup used by the website filter (counts by source and type, has_crowdsource flag) |
+| `data/quality_audit.csv` | Every audit round: seeded random sample scored Accurate / Approximate / Partial / Wrong against source text |
+| `validate_impacts.py` | Schema validation gate (unique ids, Iowa bbox, dates, vocabularies); run before every release |
 
 ## Fields
 
 | Field | Type | Definition |
 |---|---|---|
 | `impact_id` | UUID | Stable unique identifier |
-| `episode_id` | string | Compendium `NEW_EPISODE_ID` (e.g. `191899_0`); assigned to news records by date window + county overlap |
+| `episode_id` | string | Compendium `NEW_EPISODE_ID` (e.g. `191899_0`); assigned to news records by date window + county overlap. Overlapping candidate episodes are tie-broken toward the most specific one: unpadded-window overlap first, then narrowest window, then most NOAA events in the record's county |
 | `event_id` | int or blank | NOAA `EVENT_ID` when the record comes from a specific event |
 | `source_type` | enum | `noaa_narrative`, `local_news`, `agency_web` (NWS event summary pages) (future: `nws_lsr`, `globe_observer`, `social_media`) |
 | `source_ref` | string | NOAA event reference or article URL |
@@ -75,14 +80,23 @@ that produced it and a link back to its source.
 
 ## Quality audit
 
-First audit (2026-08-17, random sample of 24 records, seed 42, GroundSource
-rubric, see `data/quality_audit.csv`): 19 Accurate, 4 Approximate, 1 Wrong,
-so 96 percent Accurate or Approximate. The one Wrong record was a river-crest
-sentence typed as road_flooded because "Railroad Bridge" matched the road
-pattern; the extractor was fixed (railroad is now excluded) and that record is
-no longer produced. The Approximate cases are town-level "documented flooding"
-statements recorded as road_flooded with confidence B, and one stranded-vehicle
-report typed as rescue. Repeat the audit with a fresh seed before each release.
+Audit rounds live in `data/quality_audit.csv` (GroundSource rubric: Accurate /
+Approximate / Partial / Wrong; every round uses a fresh stated seed).
+
+* Round 1 (2026-08-17, 24 records, seed 42): 19 Accurate, 4 Approximate,
+  1 Wrong (96 percent Accurate or Approximate). The Wrong record was a
+  river-crest sentence typed as road_flooded because "Railroad Bridge" matched
+  the road pattern; the extractor was fixed (railroad is now excluded) and the
+  record is no longer produced.
+* Round 2 (2026-08-17, 12 of the 73 round-4 news/agency records, seed 43,
+  re-fetched every sampled source): 11 Accurate, 1 Approximate (an undated
+  radio item whose dates are inferred from day-of-week context; it already
+  carries confidence C). 100 percent Accurate or Approximate; one source
+  publication date was corrected during the audit.
+* Cumulative: 36 sampled, 30 Accurate, 5 Approximate, 1 Wrong (fixed), i.e.
+  97 percent Accurate or Approximate.
+
+Repeat with a fresh seed before each release.
 
 ## Intended use
 

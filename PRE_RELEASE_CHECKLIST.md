@@ -15,24 +15,34 @@ Run through this before merging to main or announcing the repository.
 
 ## Data quality
 
-- [x] Impact records validated: unique ids, coordinates inside Iowa, end date
-      not before start date, severity 0-3, confidence A-C
+- [x] Impact records validated by script (validate_impacts.py): unique ids,
+      coordinates inside Iowa, end date not before start date, severity 0-3,
+      confidence A-C, controlled vocabularies, sources all logged
 - [x] Every news/agency source logged in sources_news.csv, including rejected
-      and unreachable ones
-- [ ] Precision audit before the data paper: score a random sample of records
-      Accurate / Approximate / Partial / Wrong against their text_span and
-      report the shares (GroundSource rubric, see impact_schema.md)
+      and unreachable ones (135 sources); per-episode search outcomes in
+      search_log.csv
+- [x] Precision audit rounds recorded in data/quality_audit.csv: round 1
+      (seed 42, 24 records, 96% Accurate+Approximate) and round 2 (seed 43,
+      12 round-4 records re-checked against re-fetched sources, 100%
+      Accurate+Approximate; one pub date corrected). Repeat with a fresh
+      seed before the data paper submission.
+- [x] Database-ready master dataset built (impacts_master.csv/.geojson +
+      impacts_data_dictionary.csv)
 
 ## Website
 
-- [x] Filters verified headless: baseline episode count unchanged, crowdsource
-      filter and impacts slider work, no console errors from the add-on
+- [x] Filters verified headless (round 4): baseline 135 episodes and 560
+      points; crowdsource preset narrows to 33 episodes; impact-type chips,
+      live counts, and reset behave; no add-on console errors; impacts.csv
+      still appended to episode ZIP downloads
 - [ ] After merge: check GitHub Pages serves the updated docs/index.html and
-      spot-check one episode popup and one download bundle in a browser
+      spot-check one episode popup, the preset chips, and one download bundle
+      in a browser
 
 ## Publication
 
-- [x] README with data layers, run order, and attribution
+- [x] README with data layers, run order, attribution, and database loading
+      instructions
 - [x] requirements.txt, LICENSE, CITATION.cff
 - [ ] Mint a DOI (Zenodo or the university library) at the first release tag
 - [ ] Add the compendium URL and DOI to the conference abstract and paper
