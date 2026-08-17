@@ -11,3 +11,11 @@ S9,local_news,NBC News,https://www.nbcnews.com/news/weather/record-flooding-inun
 S10,local_news,Waterloo-Cedar Falls Courier,https://wcfcourier.com/news/local/black-hawk-county-flooded-road-closures/article_3ef554fa-324f-11ef-9829-5f1b80a71457.html,,unreachable,Paywall redirect
 S11,local_news,KELOLAND,https://www.keloland.com/top-stories/sioux-center-ia-no-travel-advised-due-to-flooding/,,unreachable,HTTP 403
 S12,local_news,Sioux City Journal,https://siouxcityjournal.com/news/local/weather/a-big-punch-to-the-chin-hundreds-of-rock-valley-homes-hit-by-record-breaking/article_69563ef4-3091-11ef-afa7-7bf9facdd99f.html,2024-06-22,candidate,Not yet extracted (likely paywalled); title corroborates hundreds of homes hit in Rock Valley
+S13,agency_web,NWS Des Moines,https://weather.gov/dmx/2024-May-21-Iowa-TornadoesWindsFlooding,,used,"Official summary, May 21 2024 tornadoes, wind, and flash flooding"
+S14,agency_web,NWS Des Moines,https://www.weather.gov/dmx/202406-HeavyRainfall-RecordRiverFlooding,,used,"Official summary, June 2024 heavy rain and record river flooding, West Fork Des Moines River"
+S15,local_news,Charles City Press,https://www.charlescitypress.com/front/2024/06/24/cedar-river-receding-after-bifurcating-charles-city/,2024-06-24,used,Cedar River flood in Charles City
+S16,agency_web,Iowa DOT,https://iowadot.gov/news/2024-06-25/update-i-29-and-i-680-north-council-bluffs-close-later-tonight-due-flooding,2024-06-25,used,Interstate closures north of Council Bluffs
+S17,agency_web,City of Waverly,https://www.waverlyia.com/news/public-works/flooding-update--62524.aspx,2024-06-25,used,City flooding update with street closures
+S18,local_news,KCRG,https://www.kcrg.com/2025/08/18/flooding-closes-parks-part-popular-trail-decorah/,2025-08-18,used,Decorah park and trail flooding
+S19,local_news,Explore Okoboji,https://www.exploreokoboji.com/news/massive-flooding-all-across-the-region-a-disaster-is-unfolding-in-south-spencer/,2024-06-22,used,"South Spencer disaster coverage, June 22 2024"
+S20,local_news,Sioux City Journal,https://siouxcityjournal.com/news/state-regional/little-sioux-river-flooding-spencer/article_0ad6b77a-331e-11ef-99ee-a3feb6d90b5b.html,2024-06-26,candidate,"Street by street cleanup in Spencer; likely paywalled, not yet extracted"
