@@ -1,0 +1,13 @@
+source_id,source_type,outlet,url,pub_date,status,note
+S1,agency_web,NWS Sioux Falls,https://www.weather.gov/fsd/20240620-22-HeavyRain-Flooding,,used,"Official event summary, June 20-22 2024 heavy rain and historic flooding"
+S2,local_news,KTIV,https://www.ktiv.com/2024/06/22/emergency-evacuation-issued-city-rock-valley-ia-due-rising-floodwaters/,2024-06-22,used,Rock Valley evacuation and rescues
+S3,agency_web,NWS Quad Cities,https://www.weather.gov/dvn/summary_071125,,used,"Official event summary, July 11 2025 flash flooding"
+S4,local_news,KCRG,https://www.kcrg.com/2025/07/12/streets-flood-like-river-dubuque-after-heavy-rains-cars-damaged/,2025-07-11,used,Dubuque street flooding
+S5,agency_web,NWS Sioux Falls,https://www.weather.gov/fsd/20230805-flooding-sesdnwia,,used,"Official event summary, Aug 5-6 2023 flooding"
+S6,agency_web,NWS La Crosse,https://www.weather.gov/arx/aug2721,,used,"Official summary, late Aug 2021 northeast Iowa flooding"
+S7,local_news,Patch Cedar Falls,https://patch.com/iowa/cedarfalls/flooding-leads-to-highway-closures-around-iowa-as-suvf6a0b5a235,2013-05-28,rejected,Outside 2021-2025 study window (May 2013 event)
+S8,local_news,KCRG,https://www.kcrg.com/2024/05/21/severe-storms-still-track-through-this-evening/,2024-05-21,rejected,"Warning-stage coverage only, no realized flood impacts stated"
+S9,local_news,NBC News,https://www.nbcnews.com/news/weather/record-flooding-inundates-northwest-iowa-prompts-evacuations-isolates-rcna158513,,unreachable,Blocked by robots.txt
+S10,local_news,Waterloo-Cedar Falls Courier,https://wcfcourier.com/news/local/black-hawk-county-flooded-road-closures/article_3ef554fa-324f-11ef-9829-5f1b80a71457.html,,unreachable,Paywall redirect
+S11,local_news,KELOLAND,https://www.keloland.com/top-stories/sioux-center-ia-no-travel-advised-due-to-flooding/,,unreachable,HTTP 403
+S12,local_news,Sioux City Journal,https://siouxcityjournal.com/news/local/weather/a-big-punch-to-the-chin-hundreds-of-rock-valley-homes-hit-by-record-breaking/article_69563ef4-3091-11ef-afa7-7bf9facdd99f.html,2024-06-22,candidate,Not yet extracted (likely paywalled); title corroborates hundreds of homes hit in Rock Valley

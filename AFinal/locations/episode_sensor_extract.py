@@ -51,7 +51,16 @@ SENSOR_TABLES = {
 }
 
 # ── ownCloud sync ────────────────────────────────────────────────────────────
-OWNCLOUD_SHARE_TOKEN = 'pLMo9aGbKKsrJNh'
+# Public-share token for the UIowa ownCloud folder holding the sensor archive.
+# Set it in the environment rather than committing it to the repository:
+#   Windows (PowerShell):  $env:OWNCLOUD_SHARE_TOKEN = "<token>"
+#   Linux / macOS:         export OWNCLOUD_SHARE_TOKEN="<token>"
+OWNCLOUD_SHARE_TOKEN = os.environ.get('OWNCLOUD_SHARE_TOKEN', '')
+if not OWNCLOUD_SHARE_TOKEN:
+    import warnings
+    warnings.warn('OWNCLOUD_SHARE_TOKEN is not set; sensor archive sync from '
+                  'ownCloud will fail until you export it (ask the team for '
+                  'the current token).')
 OWNCLOUD_WEBDAV_BASE = 'https://transit.engineering.uiowa.edu/owncloud/public.php/webdav/'
 OWNCLOUD_ZIP_MANIFEST = {
     'ifc_river':        'IFC_river_sensors_WY2021-2025.zip',

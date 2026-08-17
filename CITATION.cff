@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use the Iowa Flood Compendium, please cite it as below."
+title: "Iowa Flood Compendium: a multi-source dataset for evaluating flood experiments and impacts in Iowa (2021-2025)"
+type: dataset
+authors:
+  - family-names: Fuchtman
+    given-names: Corin
+    affiliation: "IIHR Hydroscience and Engineering, University of Iowa"
+  - family-names: Abdelkader
+    given-names: Mohamed
+    email: mohamed-abdelkader@uiowa.edu
+    affiliation: "IIHR Hydroscience and Engineering, University of Iowa"
+repository-code: "https://github.com/CorinFuchtman/IA_Flood_Compendium"
+abstract: >-
+  Episode-based collection of Iowa flood observations, 2021-2025: NOAA Storm
+  Events flood episodes joined with Iowa Flood Center and USGS sensors, MRMS
+  rainfall, USGS high water marks, FEMA claims, Iowa Flood Center community
+  inundation maps, social vulnerability, and geo-referenced flood impact
+  records mined from storm narratives and local news with large language
+  models. Built to support flood modeling experiments along the forecasting
+  chain, from rainfall input to simulated flows to street-scale inundation
+  maps and their associated impacts.
+keywords:
+  - flood
+  - Iowa
+  - impact-based forecasting
+  - flood inundation mapping
+  - model evaluation
+  - crowdsourcing
+license: MIT
