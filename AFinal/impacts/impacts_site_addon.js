@@ -188,7 +188,7 @@
 
   try {
     var origRecompute = recompute;
-    recompute = function () { origRecompute(); renderImpacts(); };
+    recompute = function () { var r = origRecompute(); renderImpacts(); return r; };
   } catch (e) { console.warn('impacts addon: recompute wrap failed', e); }
 
   /* ---------- impacts.csv inside per-episode download ZIPs ---------- */
