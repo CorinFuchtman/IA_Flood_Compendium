@@ -33,3 +33,6 @@ AFinal/locations/choropleth/embedded_episode_data.b64.txt
 AFinal/locations/episode_191899_0_all_outputs.zip
 AFinal/locations/episode_191899_0_inundation_layers.gpkg
 AFinal/locations/episode_191899_0_mrms_precip_total.tif
+
+# Impacts module: downloaded gazetteer cache
+AFinal/impacts/data/census_gazetteer_places_ia.txt
