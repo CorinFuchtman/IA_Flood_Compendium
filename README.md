@@ -104,4 +104,4 @@ GroundSource (Google Research, 2026) and HANZE v2.1 (Paprotny et al., ESSD,
 ## Team
 
 Iowa Flood Center / IIHR Hydroscience and Engineering, University of Iowa.
-Contact: Mohamed Abdelkader (mohamed-abdelkader@uiowa.edu).
+Contact: Corin Fuchtman (corin-fuchtman@uiowa.edu).
