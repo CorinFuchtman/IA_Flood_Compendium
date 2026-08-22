@@ -18,7 +18,8 @@ Output shape (before compression):
       "usgs_sensors/<code>.csv": "<csv text>",
       "ifc_hydrostations/<code>.csv": "<csv text>",
       "ifc_river_sensors/<code>.csv": "<csv text>",
-      "mrms_precipitation/hourly_precip.csv": "<csv text>"
+      "mrms_precipitation/hourly_precip.csv": "<csv text>",
+      "flash_recurrence/hourly_ari.csv": "<csv text>"
     }, ...
   }
 
@@ -39,6 +40,7 @@ from pathlib import Path
 
 from episode_sensor_extract import load_noaa_events, match_sensors, load_archive_slice, get_sensor_code, SENSOR_TABLES
 from episode_precip_extract import extract_episode_precip_timeseries
+from episode_flash_extract import extract_episode_flash
 
 BASE_DIR = Path(__file__).parent
 OUT_PATH = BASE_DIR / 'choropleth' / 'embedded_episode_data.b64.txt'
@@ -74,6 +76,10 @@ def build_episode_payload(episode_id, episode_rows):
     precip_df = extract_episode_precip_timeseries(episode_id, events_df=None)
     if not precip_df.empty:
         files['mrms_precipitation/hourly_precip.csv'] = precip_df.to_csv(index=False)
+
+    flash_df, _ = extract_episode_flash(episode_id, events_df=None)
+    if not flash_df.empty:
+        files['flash_recurrence/hourly_ari.csv'] = flash_df.to_csv(index=False)
 
     return files
 

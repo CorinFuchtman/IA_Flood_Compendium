@@ -17,6 +17,11 @@ AFinal/locations/*_log.txt
 # FLASH ARI raw data pulled manually from RMA's site (see episode_rma_extract.py)
 AFinal/locations/rma_cause_of_loss/raw/
 
+# Unrelated GLOBE Observer data (land cover/sky/tree height) not used by
+# episode_rma_extract.py or any other script here -- multi-GB, exceeds
+# GitHub's per-file limit.
+AFinal/locations/rma_cause_of_loss/globe_*.json
+
 # Superseded preview/exploration artifacts (replaced by choropleth/wizard.html)
 AFinal/locations/choropleth/preview_*.html
 AFinal/locations/choropleth/sensors_by_huc8.geojson

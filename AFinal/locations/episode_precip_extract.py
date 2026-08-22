@@ -47,18 +47,25 @@ def _episode_bbox(episode_rows):
     return min_lat, max_lat, min_lon % 360, max_lon % 360
 
 
-def _hourly_bbox_mean(grid, min_lat, max_lat, lon_min_360, lon_max_360):
-    """Returns (mean_mm, max_mm) for one hour's cached grid, or (None, None)
-    if nothing usable. Falls back to the nearest single cell when the bbox
-    is narrower than the ~0.01deg grid spacing -- see extract_episode_precip's
-    docstring/comment for why this fallback exists (40 of 135 episodes hit it)."""
-    values, lats, lons = grid
+def _bbox_cell_indices(lats, lons, min_lat, max_lat, lon_min_360, lon_max_360):
+    """Shared lat/lon index selection for cropping one hour's cached grid to
+    an episode bbox, with the same nearest-single-cell fallback used when the
+    bbox is narrower than the ~0.01deg grid spacing (40 of 135 episodes hit
+    this -- see extract_episode_precip's docstring/comment)."""
     lat_idx = np.where((lats >= min_lat) & (lats <= max_lat))[0]
     lon_idx = np.where((lons >= lon_min_360) & (lons <= lon_max_360))[0]
     if lat_idx.size == 0:
         lat_idx = np.array([np.argmin(np.abs(lats - (min_lat + max_lat) / 2))])
     if lon_idx.size == 0:
         lon_idx = np.array([np.argmin(np.abs(lons - (lon_min_360 + lon_max_360) / 2))])
+    return lat_idx, lon_idx
+
+
+def _hourly_bbox_mean(grid, min_lat, max_lat, lon_min_360, lon_max_360):
+    """Returns (mean_mm, max_mm) for one hour's cached grid, or (None, None)
+    if nothing usable."""
+    values, lats, lons = grid
+    lat_idx, lon_idx = _bbox_cell_indices(lats, lons, min_lat, max_lat, lon_min_360, lon_max_360)
     sub = values[np.ix_(lat_idx, lon_idx)]
     valid = sub[~np.isnan(sub)]
     if valid.size == 0:
@@ -66,13 +73,30 @@ def _hourly_bbox_mean(grid, min_lat, max_lat, lon_min_360, lon_max_360):
     return float(valid.mean()), float(valid.max())
 
 
+def _hourly_bbox_grid(grid, min_lat, max_lat, lon_min_360, lon_max_360):
+    """Returns the cropped 2D sub-array for one hour's cached grid (same
+    cropping as _hourly_bbox_mean, but keeps per-cell values instead of
+    collapsing to an aggregate) -- used to accumulate a per-pixel total
+    across an episode's hours, so median/max can be computed per-pixel
+    rather than per-hour."""
+    values, lats, lons = grid
+    lat_idx, lon_idx = _bbox_cell_indices(lats, lons, min_lat, max_lat, lon_min_360, lon_max_360)
+    return values[np.ix_(lat_idx, lon_idx)]
+
+
 def extract_episode_precip(episode_id, pad_hours=3, events_df=None, force=False):
     """
-    Returns {'total_mm': float, 'hours_with_data': int, 'hours_total': int}.
+    Returns {'total_mm', 'median_mm', 'max_mm', 'hours_with_data', 'hours_total'}.
     total_mm is the bbox-mean accumulated precipitation across the episode's
-    padded UTC window; hours_with_data/hours_total is a QC signal (a low
-    ratio means the hour cache is missing/incomplete for that window, not
-    necessarily that it was dry).
+    padded UTC window (unchanged computation, kept as its own pass so this
+    number never shifts). median_mm/max_mm instead accumulate a per-pixel
+    total across the same hours/bbox (nansum per cell, same all-NaN masking
+    as build_embedded_mrms_grids.build_episode_grid) and take the median/max
+    over that per-pixel grid -- i.e. "the typical/worst single cell in the
+    basin got this much rain over the whole episode", not a per-hour max.
+    hours_with_data/hours_total is a QC signal (a low ratio means the hour
+    cache is missing/incomplete for that window, not necessarily that it was
+    dry).
     """
     safe_id = str(episode_id).replace('/', '_')
     out_dir = EPISODES_DIR / safe_id
@@ -88,17 +112,41 @@ def extract_episode_precip(episode_id, pad_hours=3, events_df=None, force=False)
 
     total_mm = 0.0
     hours_with_data = 0
+    pixel_sum = None
+    pixel_all_nan = None
     for hr in hours:
         grid = load_hour_grid(hr.to_pydatetime())
         if grid is None:
             continue
         mean_mm, _ = _hourly_bbox_mean(grid, min_lat, max_lat, lon_min_360, lon_max_360)
-        if mean_mm is None:
-            continue
-        total_mm += mean_mm
-        hours_with_data += 1
+        if mean_mm is not None:
+            total_mm += mean_mm
+            hours_with_data += 1
 
-    result = {'total_mm': round(total_mm, 2), 'hours_with_data': hours_with_data, 'hours_total': len(hours)}
+        sub = _hourly_bbox_grid(grid, min_lat, max_lat, lon_min_360, lon_max_360)
+        hour_nan = np.isnan(sub)
+        hour_contrib = np.where(hour_nan, 0.0, sub)
+        if pixel_sum is None:
+            pixel_sum = hour_contrib.copy()
+            pixel_all_nan = hour_nan.copy()
+        else:
+            pixel_sum += hour_contrib
+            pixel_all_nan &= hour_nan
+
+    if pixel_sum is not None:
+        valid_pixels = pixel_sum[~pixel_all_nan]
+    else:
+        valid_pixels = np.array([])
+    median_mm = float(np.median(valid_pixels)) if valid_pixels.size else None
+    max_mm = float(np.max(valid_pixels)) if valid_pixels.size else None
+
+    result = {
+        'total_mm': round(total_mm, 2),
+        'median_mm': round(median_mm, 2) if median_mm is not None else None,
+        'max_mm': round(max_mm, 2) if max_mm is not None else None,
+        'hours_with_data': hours_with_data,
+        'hours_total': len(hours),
+    }
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(result), encoding='utf-8')
     return result
@@ -138,5 +186,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     result = extract_episode_precip(args.episode_id, force=args.force)
-    print(f"Episode {args.episode_id}: {result['total_mm']} mm "
+    print(f"Episode {args.episode_id}: avg {result['total_mm']} mm, "
+          f"median (pixel) {result['median_mm']} mm, max (pixel) {result['max_mm']} mm "
           f"({result['hours_with_data']}/{result['hours_total']} hours had data)")
