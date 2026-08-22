@@ -147,7 +147,7 @@
             ep.overpasses.forEach(function (o) {
               rows.push([o.t, o.p, o.s, o.v, o.c, o.h, o.w].join(','));
             });
-            zip.file('episode_' + episodeId + '/satellite_overpasses.csv',
+            zip.file(episodeId + '/satellite_overpasses.csv',
               rows.join('\n'));
           }
         } catch (e) { console.warn('imagery addon: zip append failed', e); }

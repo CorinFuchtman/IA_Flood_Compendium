@@ -85,11 +85,17 @@ Files below are in `data/impacts/`; scripts are in `pipeline/impacts/`.
   covered) so coverage work is a checklist, not archaeology.
 * `validate_impacts.py`: schema validation gate; `quality_audit.csv`:
   seeded audit rounds (currently 97 percent Accurate or Approximate).
-* `augment_site.py` embeds the records in the website and adds the "Flood
-  impact reports" panel: a severity-colored map layer, one-click preset chips
-  (All, Crowdsourced, Street-level, Severe), impact-type toggles, live
-  result counts, and a minimum-records slider. Per-episode download ZIPs
-  include `impacts.csv`.
+
+The site itself loads these records natively: `pipeline/build_wizard_data.py`
+reads `impacts_noaa.csv` and `impacts_news.csv` directly (no separate
+"augment" pass needed), and every episode in `wizard_data.json` carries
+`n_impacts`/`n_impacts_crowd`/`has_crowdsource`/`impact_points`.
+`build_wizard_html.py` renders those as the "Flood impact reports" section of
+the Impacts filter group: a severity-colored map layer, one-click preset
+chips (All, Crowdsourced, Street-level, Severe), impact-type toggles, live
+result counts, and a minimum-records slider that composes with every other
+filter on the page. Per-episode download ZIPs and `manifest.csv` include
+impact counts and `impacts.csv`.
 
 Episodes without crowdsourced data stay in the compendium. The impact layer
 is a filter and an evaluation target, not an inclusion criterion.
@@ -128,19 +134,20 @@ re-downloading: `mrms_hour_cache/`, `flash_ari_hour_cache/`,
    environment.
 3. Rainfall: `pipeline/mrms_hour_cache.py` and `pipeline/flash_ari_hour_cache.py`
    (large downloads), then `pipeline/build_embedded_mrms_grids.py`
-4. Episode data for the site: `pipeline/build_wizard_data.py` (runs the
-   per-episode HWM, FEMA, rainfall, FLASH, RMA and inundation extracts) then
-   `pipeline/build_embedded_episode_data.py`
-5. Impacts: `pipeline/impacts/episode_impacts_extract.py`,
+4. Impacts: `pipeline/impacts/episode_impacts_extract.py`,
    `build_news_impacts.py`, `build_impact_index.py`,
    `build_master_impacts.py`, `validate_impacts.py`, `generate_source_leads.py`
-6. Imagery: `pipeline/imagery/episode_satellite_overpasses.py` then
+5. Imagery: `pipeline/imagery/episode_satellite_overpasses.py` then
    `build_imagery_index.py` (add `--planet` with a Planet key set to include
    Planet scenes)
-7. Website: `pipeline/impacts/augment_site.py` and
-   `pipeline/imagery/augment_site_imagery.py` (add their fields to
-   `data/site_build/wizard_data.json`), then `pipeline/build_wizard_html.py`,
-   then copy `data/site_build/wizard.html` to `docs/index.html` to publish.
+6. Episode data for the site: `pipeline/build_wizard_data.py` (runs the
+   per-episode HWM, FEMA, rainfall, FLASH, RMA and inundation extracts and
+   reads the impact records from step 4) then
+   `pipeline/build_embedded_episode_data.py`
+7. Website: `pipeline/imagery/augment_site_imagery.py` (adds the imagery
+   fields to `data/site_build/wizard_data.json`), then
+   `pipeline/build_wizard_html.py`, then copy `data/site_build/wizard.html` to
+   `docs/index.html` to publish.
 
 ## Data sources and attribution
 

@@ -1,6 +1,6 @@
 """Add the satellite imagery layer to the compendium website.
 
-Mirrors pipeline/impacts/augment_site.py: every episode in the embedded
+Like the native impacts layer in build_wizard_data.py, every episode in the embedded
 WIZARD_DATA gains imagery_grade, has_usable_imagery, n_overpasses_during and a
 compact overpasses list, and imagery_site_addon.js is injected before </body>.
 
