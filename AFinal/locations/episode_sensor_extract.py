@@ -30,6 +30,7 @@ Usage:
     bundle = build_episode_sensor_bundle('191899_0', granularity='county', pad_hours=72)
 """
 import json
+import os
 import shutil
 import zipfile
 from datetime import timedelta
