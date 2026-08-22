@@ -56,11 +56,17 @@ episodes with crowdsourced reports, 135 sources logged.
   covered) so coverage work is a checklist, not archaeology.
 * `validate_impacts.py`: schema validation gate; `data/quality_audit.csv`:
   seeded audit rounds (currently 97 percent Accurate or Approximate).
-* `augment_site.py` embeds the records in the website and adds the "Flood
-  impact reports" panel: a severity-colored map layer, one-click preset chips
-  (All, Crowdsourced, Street-level, Severe), impact-type toggles, live
-  result counts, and a minimum-records slider. Per-episode download ZIPs
-  include `impacts.csv`.
+
+The site itself loads these records natively -- `build_wizard_data.py` reads
+`data/impacts_noaa.csv` and `data/impacts_news.csv` directly (no separate
+"augment" pass needed) and every episode in `wizard_data.json` carries
+`n_impacts`/`n_impacts_crowd`/`has_crowdsource`/`impact_points`.
+`build_wizard_html.py` renders those as the "Flood impact reports" section of
+the Impacts filter group: a severity-colored map layer, one-click preset
+chips (All, Crowdsourced, Street-level, Severe), impact-type toggles, live
+result counts, and a minimum-records slider that composes with every other
+filter on the page. Per-episode download ZIPs and `manifest.csv` include
+impact counts and `impacts.csv`.
 
 Episodes without crowdsourced data stay in the compendium. The impact layer
 is a filter and an evaluation target, not an inclusion criterion.
@@ -81,10 +87,10 @@ Run order (from `AFinal/locations/` unless noted):
    `../impacts/validate_impacts.py`, `../impacts/generate_source_leads.py`
    (impact records, master dataset, validation, student worksheet)
 5. `build_wizard_data.py` then `build_embedded_episode_data.py` then
-   `build_wizard_html.py` (site build)
-6. `../impacts/augment_site.py` (adds the impacts layer to the built site and
-   to `docs/index.html`)
-7. Copy `choropleth/wizard.html` to `docs/index.html` to publish.
+   `build_wizard_html.py` (site build -- picks up the impacts data from step 4
+   automatically if it's present; the wizard still builds fine without it, just
+   with an empty impacts layer)
+6. Copy `choropleth/wizard.html` to `docs/index.html` to publish.
 
 ## Data sources and attribution
 
