@@ -29,6 +29,13 @@ Run through this before merging to main or announcing the repository.
 - [x] Database-ready master dataset built (impacts_master.csv/.geojson +
       impacts_data_dictionary.csv)
 
+- [x] Satellite overpasses validated: coverage fractions within 0 to 1, NOAA
+      CST-6 times converted to UTC explicitly, window labels consistent with
+      each episode's begin and end, radar rows carry no cloud value
+- [ ] Re-run the overpass query with `--planet` once PL_API_KEY is set, so the
+      imagery layer includes daily 3 m Planet scenes alongside the public
+      Sentinel and Landsat catalogues
+
 ## Website
 
 - [x] Filters verified headless (round 4): baseline 135 episodes and 560
