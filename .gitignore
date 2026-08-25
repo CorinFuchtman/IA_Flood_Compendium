@@ -36,3 +36,6 @@ AFinal/locations/episode_191899_0_mrms_precip_total.tif
 
 # Impacts module: downloaded gazetteer cache
 AFinal/impacts/data/census_gazetteer_places_ia.txt
+
+# Imagery module: per-episode overpass query cache
+AFinal/imagery/_cache/

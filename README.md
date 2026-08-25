@@ -22,6 +22,7 @@ reports, then download per-episode data bundles.
 | Inundation maps | Iowa Flood Center community inundation map layers | `episode_inundation_extract.py`, `ifc_community_layers.csv` |
 | Social vulnerability | CDC/ATSDR SVI 2022, county level | `svi_iowa_county_2022.csv` |
 | Flood impact reports | NOAA narratives + local news mined with large language models; geo-referenced records of flooded and closed streets, rescues, evacuations, flooded homes | `AFinal/impacts/` |
+| Satellite overpasses | Sentinel-2, Sentinel-1 radar and Landsat passes within 48 hours of each episode, with acquisition time, coverage and cloud; Planet optional with a key | `AFinal/imagery/` |
 
 ## The impacts layer
 
@@ -65,6 +66,20 @@ episodes with crowdsourced reports, 135 sources logged.
 Episodes without crowdsourced data stay in the compendium. The impact layer
 is a filter and an evaluation target, not an inclusion criterion.
 
+## The satellite imagery layer
+
+`AFinal/imagery/` records which satellites passed over each episode's counties
+within 48 hours either side of the flood, and exactly when. 764 overpasses
+across 134 of 135 episodes: 78 episodes were imaged during or just after the
+flood (59 clear optical, 19 Sentinel-1 radar), and 33 of those also have a
+clear pre-flood baseline for change detection. Only timing and footprint
+coverage are stored, no pixels, so the layer is small and quick to rebuild.
+
+The website filters on this, so an episode that can actually be validated
+against an image is one click away, and each episode's overpass times appear
+in its detail panel and download bundle. See `AFinal/imagery/README.md`,
+including how to add Planet scenes once a Planet key is set.
+
 ## Reproducing the pipeline
 
 Python 3.10+. Install dependencies: `pip install -r requirements.txt`
@@ -80,9 +95,12 @@ Run order (from `AFinal/locations/` unless noted):
    `../impacts/build_impact_index.py`, `../impacts/build_master_impacts.py`,
    `../impacts/validate_impacts.py`, `../impacts/generate_source_leads.py`
    (impact records, master dataset, validation, student worksheet)
+4b. `../imagery/episode_satellite_overpasses.py` then
+   `../imagery/build_imagery_index.py` (satellite overpasses; add `--planet`
+   with a Planet key set to include Planet scenes)
 5. `build_wizard_data.py` then `build_embedded_episode_data.py` then
    `build_wizard_html.py` (site build)
-6. `../impacts/augment_site.py` (adds the impacts layer to the built site and
+6. `../impacts/augment_site.py` then `../imagery/augment_site_imagery.py`
    to `docs/index.html`)
 7. Copy `choropleth/wizard.html` to `docs/index.html` to publish.
 
@@ -92,7 +110,9 @@ NOAA Storm Events Database (NCEI); Iowa Flood Center / IIHR (bridge sensors,
 hydrostations, community inundation maps, IFIS); USGS (NWIS gauges, STN high
 water marks); FEMA (OpenFEMA NFIP claims); NOAA MRMS (rainfall); CDC/ATSDR
 (Social Vulnerability Index); US Census TIGERweb and USGS WBD (boundaries);
-local news outlets credited per record in `sources_news.csv`. All third-party
+ESA Copernicus Sentinel-1 and Sentinel-2 and USGS Landsat via the
+Element 84 Earth Search STAC catalogue, and Planet Labs where a key is
+supplied; local news outlets credited per record in `sources_news.csv`. All third-party
 data remain under their providers' terms.
 
 ## Citing
