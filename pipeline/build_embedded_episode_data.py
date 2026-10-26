@@ -28,7 +28,7 @@ the resulting string as a JS constant, and the page decompresses it lazily
 (only when a download is first requested) using the browser's native
 DecompressionStream -- no extra JS library needed for that half.
 
-Measured via estimate_embed_size.py before building this for real: ~116MB
+Measured via archive/pipeline/estimate_embed_size.py before building this for real: ~116MB
 raw across all episodes, which is why this goes through gzip rather than
 being embedded as plain text.
 """

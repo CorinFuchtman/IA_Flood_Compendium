@@ -37,13 +37,14 @@ pipeline/          Python scripts that build the dataset and the website
   imagery/         satellite overpass layer
 data/
   noaa/            NOAA Storm Events tables (the episode list everything joins to)
-  sensors/         sensor location tables, with HUC8 and county joins, and shapefiles
+  sensors/         raw sensor location lists, and the same lists joined to HUC8 and county
   support/         SVI, IFC inundation layer counts, IFIS community ids, RMA crop loss
   impacts/         impact records, data dictionary, schema, audit and source logs
   imagery/         satellite overpass tables
   site_build/      intermediate files the website is built from
-notebooks/         exploration notebooks (outputs cleared)
-archive/           superseded notebooks and earlier versions of the NOAA tables
+notebooks/         notebooks that built the NOAA and sensor tables (outputs cleared)
+archive/           superseded notebooks and scripts, earlier NOAA and sensor tables,
+                   and sensor shapefiles; nothing in pipeline/ reads from here
 docs/              the published website (GitHub Pages serves docs/index.html)
 cache/             not in git: large local downloads the scripts rebuild
 ```
