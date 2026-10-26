@@ -23,7 +23,12 @@ Output: data/site_build/wizard_data.json
         "precip_total_mm": n, "precip_median_mm": n, "precip_max_mm": n,
         "precip_max_intensity_mm": n | null,
         "region_intensity_mm": {"county": {"<fips>": n, ...}, "huc8": {"<huc8>": n, ...}},
-        "flash_most_severe": {"ari_years": n, "duration": "3h", "datetime_utc": "..."} | null
+        "flash_most_severe": {"ari_years": n, "duration": "3h", "datetime_utc": "..."} | null,
+        "n_impacts": n, "n_impacts_crowd": n, "has_crowdsource": bool,
+        "impact_points": [{"lat": n, "lon": n, "t": "road_flooded", "sv": 0-3,
+                            "src": "noaa_narrative"|"local_news"|"agency_web",
+                            "d": "...", "dt": "...", "q": "...", "cf": "...",
+                            "tx": "...", "u": "..."}, ...]
       }, ...
     },
     "county_geometry": <geojson FeatureCollection, from by_county.geojson>,
@@ -54,6 +59,53 @@ FEMA_PREFETCH_WORKERS = 6
 SENSOR_WINDOW_PAD_HOURS = 3  # matches build_embedded_episode_data.py's padding
 EMBEDDED_MRMS_GRIDS_PATH = SITE_BUILD_DIR / 'embedded_mrms_grids.b64.txt'
 REGION_INTENSITY_PATH = SITE_BUILD_DIR / 'region_intensity.json'
+IMPACTS_DATA_DIR = BASE_DIR.parent / 'data' / 'impacts'
+
+
+def _load_impact_points():
+    """episode_id -> (list of geo-referenced impact-report points, {'n':
+    total, 'crowd': how many are crowdsourced}), pooled from the impacts
+    pipeline's two record sources (see data/impacts/impact_schema.md):
+    impacts_noaa.csv (mined from NOAA storm narratives with regex rules) and
+    impacts_news.csv (extracted from local news/agency text with an LLM,
+    per news_extraction_prompt.md). Returns empty results for every episode
+    if that pipeline hasn't been run yet -- this feature is additive, not
+    required for the wizard to build."""
+    frames = []
+    for name in ('impacts_noaa.csv', 'impacts_news.csv'):
+        p = IMPACTS_DATA_DIR / name
+        if p.exists():
+            frames.append(pd.read_csv(p))
+    if not frames:
+        print(f'[!] No impacts_*.csv found in {IMPACTS_DATA_DIR} -- impact_points will be empty for every episode '
+              f'until pipeline/impacts/episode_impacts_extract.py and pipeline/impacts/build_news_impacts.py have been run.')
+        return {}, {}
+    imp = pd.concat(frames, ignore_index=True)
+    imp = imp[imp.episode_id.notna() & (imp.episode_id != '')]
+
+    points, counts = {}, {}
+    for eid, sub in imp.groupby('episode_id'):
+        pts = []
+        for r in sub.itertuples(index=False):
+            desc = r.location_raw if isinstance(r.location_raw, str) and r.location_raw else r.location_name
+            qty = ''
+            if pd.notna(r.quantity) and str(r.quantity).strip():
+                qty = str(r.quantity).rstrip('0').rstrip('.') if '.' in str(r.quantity) else str(r.quantity)
+                unit = str(r.quantity_unit) if pd.notna(r.quantity_unit) else ''
+                qty = (qty + ' ' + unit).strip()
+            pts.append({
+                'lat': r.lat, 'lon': r.lon, 't': r.impact_type,
+                'sv': int(r.severity), 'src': r.source_type,
+                'd': str(desc)[:160], 'dt': r.start_date,
+                'q': qty[:40],
+                'cf': str(r.confidence) if pd.notna(r.confidence) else '',
+                'tx': str(r.text_span)[:220] if isinstance(r.text_span, str) else '',
+                'u': r.source_ref if r.source_type in ('local_news', 'agency_web') else '',
+            })
+        crowd = int(sub.source_type.isin(['local_news', 'agency_web']).sum())
+        points[str(eid)] = pts
+        counts[str(eid)] = {'n': len(pts), 'crowd': crowd}
+    return points, counts
 
 
 def _load_mrms_max_intensity_lookup():
@@ -152,6 +204,7 @@ def build():
     _prefetch_fema_claims(episode_ids, events_df)
     mrms_intensity_lookup = _load_mrms_max_intensity_lookup()
     region_intensity_lookup = _load_region_intensity_lookup()
+    impact_points_lookup, impact_counts_lookup = _load_impact_points()
 
     print(f'Computing sensor availability for {len(episode_ids)} episodes...')
 
@@ -245,6 +298,9 @@ def build():
         damage_property_usd = float(episode_rows['DAMAGE_PROPERTY_USD'].sum())
         crop_indemnity_usd, _ = extract_episode_crop_loss(episode_id, events_df=events_df)
 
+        impact_points = impact_points_lookup.get(str(episode_id), [])
+        impact_counts = impact_counts_lookup.get(str(episode_id), {'n': 0, 'crowd': 0})
+
         episodes[str(episode_id)] = {
             'event_types': sorted(episode_rows['EVENT_TYPE'].dropna().unique().tolist()),
             'begin_date': str(episode_rows['BEGIN_DT'].min()),
@@ -270,6 +326,10 @@ def build():
             'n_deaths': n_deaths,
             'damage_property_usd': damage_property_usd,
             'crop_indemnity_usd': crop_indemnity_usd,
+            'n_impacts': impact_counts['n'],
+            'n_impacts_crowd': impact_counts['crowd'],
+            'has_crowdsource': impact_counts['crowd'] > 0,
+            'impact_points': impact_points,
         }
         if (i + 1) % 20 == 0 or i == len(episode_ids) - 1:
             print(f'  {i+1}/{len(episode_ids)}')

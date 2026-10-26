@@ -119,6 +119,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .checkbox-row input[type=checkbox] { width:16px; height:16px; accent-color: var(--uiowa-black); }
   .checkbox-row label { margin-bottom:0; }
   .stat { font-size:13px; margin:4px 0; }
+  .imp-chip, .imp-type { display:inline-block; margin:2px 4px 2px 0; padding:2px 8px; border:1px solid #bbb; border-radius:12px; cursor:pointer; font-size:11px; background:#fff; user-select:none; }
+  .imp-chip.active { background:#1a4d8f; color:#fff; border-color:#1a4d8f; }
+  .imp-type.off { background:#eee; color:#999; text-decoration:line-through; }
+  .impacts-sev-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin:0 3px 0 8px; }
   .stat b { color:#111; }
   .legend { font-size:11px; color:#555; margin-top:8px; }
   .legend-swatch { display:inline-block; width:12px; height:12px; margin-right:4px; vertical-align:middle; border:1px solid #999; }
@@ -359,6 +363,38 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       <div class="section">
         <label>Minimum direct + indirect deaths: <span class="slider-value" id="deaths-min-value">0</span><span class="info-wrap" tabindex="0"><span class="info-icon">i</span><span class="info-tip">Source: NOAA Storm Events Database (DEATHS_DIRECT + DEATHS_INDIRECT).</span></span></label>
         <input type="range" id="deaths-min" min="0" max="0" value="0" step="1">
+      </div>
+
+      <!-- Geo-referenced impact reports (points), as opposed to the
+           episode-level NOAA/FEMA/RMA totals above -- see impact_schema.md. -->
+      <div class="section" id="impacts-section">
+        <label>Flood impact reports<span class="info-wrap" tabindex="0"><span class="info-icon">i</span><span class="info-tip">Geo-referenced records of flooded/closed streets, rescues, evacuations, and flooded homes: mined from NOAA storm narratives, and crowdsourced from local news and agency reports. Source: AFinal/impacts/ (see impact_schema.md).</span></span></label>
+        <div class="legend" id="impacts-summary"></div>
+        <div style="margin:6px 0" id="impacts-presets">
+          <span class="imp-chip" data-preset="all">All episodes</span>
+          <span class="imp-chip" data-preset="crowd">Crowdsourced</span>
+          <span class="imp-chip" data-preset="street">Street-level</span>
+          <span class="imp-chip" data-preset="severe">Severe</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="impacts-show" checked>
+          <label for="impacts-show" style="margin-bottom:0">Show impact reports on the map</label>
+        </div>
+        <div class="checkbox-row" style="margin-top:6px">
+          <input type="checkbox" id="impacts-crowd-only">
+          <label for="impacts-crowd-only" style="margin-bottom:0">Only episodes with crowdsourced reports</label>
+        </div>
+        <label style="margin-top:8px">Minimum impact records: <span class="slider-value" id="impacts-min-value">0</span></label>
+        <input type="range" id="impacts-min" min="0" max="0" value="0" step="1">
+        <details style="margin-top:6px"><summary style="cursor:pointer; font-size:12px; font-weight:600; color:#333;">Impact types on the map</summary>
+          <div id="impacts-type-chips" style="margin-top:4px"></div>
+        </details>
+        <div class="legend" id="impacts-counts" style="margin-top:6px; font-weight:bold;"></div>
+        <div class="legend" id="impacts-legend" style="margin-top:4px"></div>
+        <div class="legend" style="margin-top:4px">
+          <a href="#" id="impacts-reset">Reset impact filters</a> &middot;
+          <a href="https://github.com/CorinFuchtman/IA_Flood_Compendium/tree/main/data/impacts" target="_blank" rel="noopener">Full dataset + schema</a>
+        </div>
       </div>
     </details>
 
@@ -670,6 +706,10 @@ let injuriesMin = 0;
 let deathsMin = 0;
 let propDmgMin = 0;
 let cropDmgMin = 0;
+let impactsMin = 0;
+let impactsCrowdOnly = false;
+let impactsStreetOnly = false;
+let impactsSevereOnly = false;
 let geoLayer = null;
 let labelLayer = L.layerGroup().addTo(map);
 
@@ -703,6 +743,25 @@ function episodePassesSviFilter(ep) {
   });
 }
 
+// A subset of impact_types (see ../impacts/impact_schema.md) treated as
+// "street-level" for the Impacts panel's one-click preset -- road/bridge
+// disruption someone could see just by driving through, as opposed to
+// rescues/evacuations/home damage that need a report to know about.
+const IMPACTS_STREET_TYPES = { road_flooded: 1, road_closed: 1, bridge_damaged: 1 };
+function episodeHasStreetImpact(ep) {
+  return (ep.impact_points || []).some((p) => IMPACTS_STREET_TYPES[p.t]);
+}
+function episodeHasSevereImpact(ep) {
+  return (ep.impact_points || []).some((p) => p.sv >= 3);
+}
+function episodePassesImpactsFilter(ep) {
+  if ((ep.n_impacts || 0) < impactsMin) return false;
+  if (impactsCrowdOnly && !ep.has_crowdsource) return false;
+  if (impactsStreetOnly && !episodeHasStreetImpact(ep)) return false;
+  if (impactsSevereOnly && !episodeHasSevereImpact(ep)) return false;
+  return true;
+}
+
 function episodePassesFilter(ep) {
   const counts = ep.n_sensors[granularity];
   return counts.ifc_river >= sensorMin.ifc_river
@@ -718,7 +777,8 @@ function episodePassesFilter(ep) {
       && ep.n_injuries >= injuriesMin
       && ep.n_deaths >= deathsMin
       && ep.damage_property_usd >= propDmgMin
-      && ep.crop_indemnity_usd >= cropDmgMin;
+      && ep.crop_indemnity_usd >= cropDmgMin
+      && episodePassesImpactsFilter(ep);
 }
 
 function colorForCount(n) {
@@ -755,7 +815,7 @@ function recompute() {
         const c = ep.n_sensors[granularity];
         return `<div><b>${id}</b> — ${ep.event_types.join(', ')} (${ep.begin_date.slice(0,10)})<br>`
              + `&nbsp;&nbsp;river: ${c.ifc_river}, hydrostation: ${c.ifc_hydrostation}, USGS: ${c.usgs}, HWMs: ${ep.n_hwms}, FEMA NFIP payout: $${ep.fema_payout_usd.toLocaleString()}, inundation maps: ${ep.n_inundation_layers > 0 ? 'yes ('+ep.n_inundation_layers+' layers)' : 'no'}, rainfall: ${ep.precip_total_mm} mm<br>`
-             + `&nbsp;&nbsp;injuries: ${ep.n_injuries}, deaths: ${ep.n_deaths}, property damage: $${ep.damage_property_usd.toLocaleString()}, flood-related crop indemnity (USDA RMA): $${ep.crop_indemnity_usd.toLocaleString()}</div>`;
+             + `&nbsp;&nbsp;injuries: ${ep.n_injuries}, deaths: ${ep.n_deaths}, property damage: $${ep.damage_property_usd.toLocaleString()}, flood-related crop indemnity (USDA RMA): $${ep.crop_indemnity_usd.toLocaleString()}, impact reports: ${ep.n_impacts || 0}${ep.n_impacts_crowd ? ' ('+ep.n_impacts_crowd+' crowdsourced)' : ''}</div>`;
       }).join('')
     : '<div style="color:#999">No episodes match current filters</div>';
 
@@ -1144,10 +1204,162 @@ function renderEventsLayer(matchingIds) {
   }
 }
 
+// ── Flood impact reports (NOAA-narrative-mined + crowdsourced) ─────────────
+// Geo-referenced impact_points per episode, added by build_wizard_data.py's
+// _load_impact_points() from ../impacts/data/impacts_{noaa,news}.csv -- see
+// ../impacts/impact_schema.md for the record schema and inclusion rules.
+// Point rendering runs inside renderMap() (below) alongside every other
+// layer, and episodePassesImpactsFilter() above is just one more clause in
+// episodePassesFilter(), so this composes with every other filter on the
+// page instead of needing its own separate pass.
+const IMPACTS_SEV_COLORS = ['#9aa0a6', '#f2c14e', '#e8710a', '#d93025'];
+const IMPACTS_SEV_NAMES = ['overbank', 'minor', 'moderate', 'major'];
+const IMPACTS_TYPE_ORDER = ['road_flooded', 'road_closed', 'bridge_damaged', 'rescue',
+  'evacuation', 'home_flooded', 'business_flooded', 'agriculture',
+  'infrastructure', 'injury', 'fatality', 'river_overbank', 'other'];
+const impactsHiddenTypes = {};  // impact_type -> true when hidden on the map
+let impactsShowOnMap = true;
+let impactsLayer = null;
+
+function escapeHtml(t) {
+  return String(t == null ? '' : t)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function initImpactsPanel() {
+  const eps = WIZARD_DATA.episodes;
+  const epIds = Object.keys(eps);
+  if (!epIds.length || typeof eps[epIds[0]].n_impacts === 'undefined') return;  // impacts pipeline not run for this build
+
+  let maxImpacts = 0, nCrowdEpisodes = 0, nRecords = 0, nCrowdRecords = 0, nSevere = 0;
+  const typeTotals = {};
+  epIds.forEach((id) => {
+    const ep = eps[id];
+    maxImpacts = Math.max(maxImpacts, ep.n_impacts || 0);
+    nRecords += (ep.n_impacts || 0);
+    nCrowdRecords += (ep.n_impacts_crowd || 0);
+    if (ep.has_crowdsource) nCrowdEpisodes += 1;
+    if (episodeHasSevereImpact(ep)) nSevere += 1;
+    (ep.impact_points || []).forEach((p) => { typeTotals[p.t] = (typeTotals[p.t] || 0) + 1; });
+  });
+
+  document.getElementById('impacts-summary').textContent =
+    `${nRecords} geo-referenced impact records (${nRecords - nCrowdRecords} from NOAA storm narratives, `
+    + `${nCrowdRecords} crowdsourced from local news and agencies).`;
+  document.querySelector('#impacts-presets [data-preset="crowd"]').textContent = `Crowdsourced (${nCrowdEpisodes})`;
+  document.querySelector('#impacts-presets [data-preset="severe"]').textContent = `Severe (${nSevere})`;
+  document.getElementById('impacts-min').max = maxImpacts;
+  document.getElementById('impacts-type-chips').innerHTML = IMPACTS_TYPE_ORDER
+    .filter((t) => typeTotals[t])
+    .map((t) => `<span class="imp-type" data-type="${t}">${t.replace(/_/g, ' ')} (${typeTotals[t]})</span>`)
+    .join('');
+  document.getElementById('impacts-legend').innerHTML = IMPACTS_SEV_NAMES
+    .map((name, sv) => `<span class="impacts-sev-dot" style="background:${IMPACTS_SEV_COLORS[sv]}"></span>${sv} ${name}`)
+    .join('') + '<br><span class="impacts-sev-dot" style="background:#fff; border:2px solid #1a4d8f;"></span>'
+    + 'ring = crowdsourced (news or agency), no ring = NOAA narrative';
+
+  impactsLayer = L.layerGroup().addTo(map);
+
+  function syncImpactsUi() {
+    document.getElementById('impacts-show').checked = impactsShowOnMap;
+    document.getElementById('impacts-crowd-only').checked = impactsCrowdOnly;
+    document.getElementById('impacts-min').value = impactsMin;
+    document.getElementById('impacts-min-value').textContent = impactsMin;
+    const activePreset = { all: !impactsCrowdOnly && !impactsStreetOnly && !impactsSevereOnly && impactsMin === 0,
+      crowd: impactsCrowdOnly, street: impactsStreetOnly, severe: impactsSevereOnly };
+    document.querySelectorAll('#impacts-presets .imp-chip').forEach((c) => {
+      c.classList.toggle('active', !!activePreset[c.dataset.preset]);
+    });
+    document.querySelectorAll('#impacts-type-chips .imp-type').forEach((c) => {
+      c.classList.toggle('off', impactsHiddenTypes[c.dataset.type] === true);
+    });
+  }
+
+  document.getElementById('impacts-show').addEventListener('change', (e) => {
+    impactsShowOnMap = e.target.checked;
+    renderImpactsLayer();
+  });
+  document.getElementById('impacts-crowd-only').addEventListener('change', (e) => {
+    impactsCrowdOnly = e.target.checked;
+    syncImpactsUi(); renderMap();
+  });
+  document.getElementById('impacts-min').addEventListener('input', (e) => {
+    impactsMin = parseInt(e.target.value, 10) || 0;
+    syncImpactsUi(); renderMap();
+  });
+  document.querySelectorAll('#impacts-presets .imp-chip').forEach((c) => {
+    c.addEventListener('click', () => {
+      const p = c.dataset.preset;
+      if (p === 'all') { impactsCrowdOnly = impactsStreetOnly = impactsSevereOnly = false; impactsMin = 0; }
+      if (p === 'crowd') impactsCrowdOnly = !impactsCrowdOnly;
+      if (p === 'street') impactsStreetOnly = !impactsStreetOnly;
+      if (p === 'severe') impactsSevereOnly = !impactsSevereOnly;
+      syncImpactsUi(); renderMap();
+    });
+  });
+  document.querySelectorAll('#impacts-type-chips .imp-type').forEach((c) => {
+    c.addEventListener('click', () => {
+      const t = c.dataset.type;
+      impactsHiddenTypes[t] = !impactsHiddenTypes[t];
+      syncImpactsUi(); renderImpactsLayer();
+    });
+  });
+  document.getElementById('impacts-reset').addEventListener('click', (e) => {
+    e.preventDefault();
+    impactsCrowdOnly = impactsStreetOnly = impactsSevereOnly = false;
+    impactsMin = 0; impactsShowOnMap = true;
+    Object.keys(impactsHiddenTypes).forEach((t) => delete impactsHiddenTypes[t]);
+    syncImpactsUi(); renderMap();
+  });
+
+  syncImpactsUi();
+}
+
+function renderImpactsLayer() {
+  if (!impactsLayer) return;
+  impactsLayer.clearLayers();
+  if (!impactsShowOnMap) { updateImpactsCounts(0, 0); return; }
+  let nPts = 0;
+  for (const epId of lastMatchingIds) {
+    const ep = WIZARD_DATA.episodes[epId];
+    for (const p of (ep.impact_points || [])) {
+      if (impactsHiddenTypes[p.t]) continue;
+      nPts += 1;
+      const crowd = p.src !== 'noaa_narrative';
+      const m = L.circleMarker([p.lat, p.lon], {
+        pane: 'eventsPane',
+        radius: crowd ? 6 : 4.5,
+        fillColor: IMPACTS_SEV_COLORS[p.sv] || IMPACTS_SEV_COLORS[1],
+        fillOpacity: 0.85,
+        color: crowd ? '#1a4d8f' : '#ffffff',
+        weight: crowd ? 2.5 : 1,
+      });
+      m.bindTooltip(`${escapeHtml(p.t.replace(/_/g, ' '))} | ${escapeHtml(p.d)} | ${escapeHtml(p.dt)}`, { sticky: true });
+      let extra = '';
+      if (p.q) extra += `<br>Quantity: ${escapeHtml(p.q)}`;
+      if (p.cf) extra += (extra ? ' | ' : '<br>') + `Confidence ${escapeHtml(p.cf)}`;
+      const source = p.u
+        ? `<br><a href="${encodeURI(p.u)}" target="_blank" rel="noopener">source</a>`
+        : '<br>Source: NOAA Storm Events narrative';
+      m.bindPopup(`<div style="max-width:280px"><b>${escapeHtml(p.t.replace(/_/g, ' '))}</b> `
+        + `(severity ${p.sv})<br><i>${escapeHtml(p.d)}</i><br>${escapeHtml(p.dt)} | episode ${escapeHtml(epId)}`
+        + `${extra}<br>${escapeHtml(p.tx || '')}${source}</div>`);
+      impactsLayer.addLayer(m);
+    }
+  }
+  updateImpactsCounts(lastMatchingIds.length, nPts);
+}
+
+function updateImpactsCounts(nEp, nPts) {
+  const el = document.getElementById('impacts-counts');
+  if (el) el.textContent = `${nEp} of ${Object.keys(WIZARD_DATA.episodes).length} episodes pass filters; ${nPts} impact points on map`;
+}
+
 function renderMap() {
   const { regionCounts, matchingIds } = recompute();
   lastMatchingIds = matchingIds;
   renderEventsLayer(currentEventsScopeIds());
+  if (impactsLayer) renderImpactsLayer();
   const geo = granularity === 'county' ? WIZARD_DATA.county_geometry : WIZARD_DATA.huc8_geometry;
   const idField = regionIdField();
   const nameField = regionNameField();
@@ -1995,6 +2207,7 @@ function syncMapControlsFromState() {
 initEventsYearToggle();
 populateEpisodeSearchList();
 populateRegionSearchList();
+initImpactsPanel();
 renderMap();
 
 // ── Info-icon tooltips: fixed-position, computed on show ─────────────────
@@ -2728,7 +2941,7 @@ document.getElementById('dl-btn-next').addEventListener('click', () => {
 // DL episode/region search shortcuts, leaderboard modal) so the folder
 // contents list only needs to be kept accurate in one place.
 function buildEpisodesReadme(scopeLabel, gran, extraLine) {
-  return `Iowa Flood Compendium -- ${scopeLabel}\r\nGenerated: ${new Date().toISOString()}\r\nGranularity: ${gran}\r\n${extraLine}\r\n\r\nEach episode folder contains:\r\n  summary.csv              -- episode metadata and headline counts\r\n  usgs_sensors/*.csv        -- one file per USGS sensor, time series over the episode window\r\n  ifc_hydrostations/*.csv   -- one file per IFC hydrostation, time series over the episode window\r\n  ifc_river_sensors/*.csv   -- one file per IFC river sensor, time series over the episode window\r\n  mrms_precipitation/hourly_precip.csv -- hourly MRMS rainfall (mean_mm, max_mm) over the episode window\r\n  hwms.csv                  -- matched USGS High-Water Mark locations\r\n  fema_claims.csv           -- matched FEMA NFIP claim locations\r\n\r\nSensors included are the union of county- and HUC8-matched sensors, so the same episode folder is complete regardless of which region view you were filtering under.\r\n`;
+  return `Iowa Flood Compendium -- ${scopeLabel}\r\nGenerated: ${new Date().toISOString()}\r\nGranularity: ${gran}\r\n${extraLine}\r\n\r\nEach episode folder contains:\r\n  summary.csv              -- episode metadata and headline counts\r\n  usgs_sensors/*.csv        -- one file per USGS sensor, time series over the episode window\r\n  ifc_hydrostations/*.csv   -- one file per IFC hydrostation, time series over the episode window\r\n  ifc_river_sensors/*.csv   -- one file per IFC river sensor, time series over the episode window\r\n  mrms_precipitation/hourly_precip.csv -- hourly MRMS rainfall (mean_mm, max_mm) over the episode window\r\n  hwms.csv                  -- matched USGS High-Water Mark locations\r\n  fema_claims.csv           -- matched FEMA NFIP claim locations\r\n  impacts.csv               -- geo-referenced flood impact reports, when any exist for this episode\r\n\r\nSensors included are the union of county- and HUC8-matched sensors, so the same episode folder is complete regardless of which region view you were filtering under.\r\n`;
 }
 
 function toCsv(rows, columns) {
@@ -2785,6 +2998,8 @@ function addEpisodeToZip(zip, episodeId, granularity, episodeData) {
     n_deaths: ep.n_deaths,
     damage_property_usd: ep.damage_property_usd,
     crop_flood_indemnity_usd_rma: ep.crop_indemnity_usd,
+    n_impact_reports: ep.n_impacts || 0,
+    n_impact_reports_crowdsourced: ep.n_impacts_crowd || 0,
   };
   folder.file('summary.csv', toCsv([summaryRow], Object.keys(summaryRow)));
 
@@ -2793,6 +3008,15 @@ function addEpisodeToZip(zip, episodeId, granularity, episodeData) {
 
   const femaRows = ep.fema_points.map((f) => ({ amount: f.amount, date: f.date, lat: f.lat, lon: f.lon }));
   folder.file('fema_claims.csv', toCsv(femaRows, ['amount', 'date', 'lat', 'lon']));
+
+  if ((ep.impact_points || []).length) {
+    const impactRows = ep.impact_points.map((p) => ({
+      impact_type: p.t, severity: p.sv, confidence: p.cf || '', source_type: p.src,
+      date: p.dt, lat: p.lat, lon: p.lon, location: p.d, quantity: p.q || '',
+      text: p.tx || '', source_url: p.u || 'NOAA Storm Events narrative',
+    }));
+    folder.file('impacts.csv', toCsv(impactRows, Object.keys(impactRows[0])));
+  }
 
   // Real per-sensor time series (usgs_sensors/, ifc_hydrostations/,
   // ifc_river_sensors/) and mrms_precipitation/hourly_precip.csv --
@@ -2819,9 +3043,10 @@ async function downloadEpisodesZip(episodeIds, granularity, zipFilename, readmeT
         return {
           episode_id: id, begin_date: ep.begin_date.slice(0, 10), event_types: ep.event_types.join('; '),
           n_sensors: ep.n_sensors[granularity].total, n_hwms: ep.n_hwms, fema_nfip_payout_usd: ep.fema_payout_usd, precip_total_mm: ep.precip_total_mm,
+          n_impact_reports: ep.n_impacts || 0,
         };
       });
-      zip.file('manifest.csv', toCsv(manifestRows, ['episode_id', 'begin_date', 'event_types', 'n_sensors', 'n_hwms', 'fema_nfip_payout_usd', 'precip_total_mm']));
+      zip.file('manifest.csv', toCsv(manifestRows, ['episode_id', 'begin_date', 'event_types', 'n_sensors', 'n_hwms', 'fema_nfip_payout_usd', 'precip_total_mm', 'n_impact_reports']));
     }
     for (const id of episodeIds) addEpisodeToZip(zip, id, granularity, episodeData);
     const blob = await zip.generateAsync({ type: 'blob' });
@@ -3019,300 +3244,6 @@ document.getElementById('lb-modal-view-map').addEventListener('click', () => {
   }
 });
 </script>
-<!-- impacts-addon -->
-<script>
-/* Impacts add-on for the Iowa Flood Compendium wizard.
- * Injected by augment_site.py. Requires WIZARD_DATA episodes to carry
- * n_impacts, n_impacts_crowd, has_crowdsource, impact_points
- * (added by the same script). Additive: wraps episodePassesFilter and
- * recompute instead of editing them, so the page works with or without it.
- *
- * v2 (round 4): one-click presets, impact-type chips for the map layer,
- * live result counts, richer popups (quantity, confidence), reset link,
- * link to the full dataset. */
-(function () {
-  if (window.__IMPACTS_ADDON__) return;
-  window.__IMPACTS_ADDON__ = true;
-  var eps = (typeof WIZARD_DATA !== 'undefined' && WIZARD_DATA.episodes) || {};
-  var epIds = Object.keys(eps);
-  if (!epIds.length || typeof eps[epIds[0]].n_impacts === 'undefined') return;
-
-  var maxImpacts = 0, nCrowd = 0, nRecords = 0, nCrowdRecords = 0;
-  var typeTotals = {};
-  epIds.forEach(function (id) {
-    var e = eps[id];
-    maxImpacts = Math.max(maxImpacts, e.n_impacts || 0);
-    nRecords += (e.n_impacts || 0);
-    nCrowdRecords += (e.n_impacts_crowd || 0);
-    if (e.has_crowdsource) nCrowd += 1;
-    (e.impact_points || []).forEach(function (p) {
-      typeTotals[p.t] = (typeTotals[p.t] || 0) + 1;
-    });
-  });
-
-  /* episode -> derived flags for presets */
-  var STREET_TYPES = { road_flooded: 1, road_closed: 1, bridge_damaged: 1 };
-  epIds.forEach(function (id) {
-    var e = eps[id], street = false, severe = false;
-    (e.impact_points || []).forEach(function (p) {
-      if (STREET_TYPES[p.t]) street = true;
-      if (p.sv >= 3) severe = true;
-    });
-    e.__has_street = street;
-    e.__has_severe = severe;
-  });
-
-  var state = {
-    show: true, crowdOnly: false, min: 0,
-    street: false, severe: false,
-    types: {}            /* impact_type -> false when hidden on the map */
-  };
-  var SEV_COLORS = ['#9aa0a6', '#f2c14e', '#e8710a', '#d93025'];
-  var SEV_NAMES = ['overbank', 'minor', 'moderate', 'major'];
-  var TYPE_ORDER = ['road_flooded', 'road_closed', 'bridge_damaged', 'rescue',
-    'evacuation', 'home_flooded', 'business_flooded', 'agriculture',
-    'infrastructure', 'injury', 'fatality', 'river_overbank', 'other'];
-
-  function esc(t) {
-    return String(t == null ? '' : t)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-
-  /* ---------- panel UI ---------- */
-  var section = document.createElement('div');
-  section.className = 'section';
-  section.id = 'impacts-section';
-  var chipCss = 'display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;' +
-    'border:1px solid #bbb;border-radius:12px;cursor:pointer;font-size:11px;' +
-    'background:#fff;user-select:none';
-  var html =
-    '<h3 style="margin:0 0 6px">Flood impact reports</h3>' +
-    '<div class="legend" style="margin-bottom:6px">' + nRecords +
-    ' geo-referenced impact records (' + (nRecords - nCrowdRecords) +
-    ' from NOAA storm narratives, ' + nCrowdRecords +
-    ' crowdsourced from local news and agencies): flooded and closed ' +
-    'streets, rescues, evacuations, flooded homes.</div>' +
-    '<div style="margin:4px 0 6px" id="impacts-presets">' +
-    '<span class="imp-chip" data-preset="all" style="' + chipCss + '">All episodes</span>' +
-    '<span class="imp-chip" data-preset="crowd" style="' + chipCss + '">Crowdsourced (' + nCrowd + ')</span>' +
-    '<span class="imp-chip" data-preset="street" style="' + chipCss + '">Street-level</span>' +
-    '<span class="imp-chip" data-preset="severe" style="' + chipCss + '">Severe (3)</span>' +
-    '</div>' +
-    '<div class="checkbox-row"><input type="checkbox" id="impacts-show" checked>' +
-    '<label for="impacts-show" style="margin-bottom:0">Show impact reports on the map</label></div>' +
-    '<div class="checkbox-row"><input type="checkbox" id="impacts-crowd-only">' +
-    '<label for="impacts-crowd-only" style="margin-bottom:0">Only episodes with crowdsourced reports</label></div>' +
-    '<label for="impacts-min" style="display:block;margin-top:6px">Minimum impact records: ' +
-    '<span id="impacts-min-val">0</span></label>' +
-    '<input type="range" id="impacts-min" min="0" max="' + maxImpacts +
-    '" value="0" step="1" style="width:100%">' +
-    '<details style="margin-top:6px"><summary style="cursor:pointer;font-size:12px">' +
-    'Impact types on the map</summary><div id="impacts-type-chips" style="margin-top:4px">';
-  TYPE_ORDER.forEach(function (t) {
-    if (!typeTotals[t]) return;
-    html += '<span class="imp-type" data-type="' + t + '" style="' + chipCss +
-      '">' + t.replace(/_/g, ' ') + ' (' + typeTotals[t] + ')</span>';
-  });
-  html += '</div></details>' +
-    '<div class="legend" id="impacts-counts" style="margin-top:6px;font-weight:bold"></div>' +
-    '<div class="legend" id="impacts-legend" style="margin-top:4px"></div>' +
-    '<div class="legend" style="margin-top:4px">' +
-    '<a href="#" id="impacts-reset" style="margin-right:10px">Reset impact filters</a>' +
-    '<a href="https://github.com/CorinFuchtman/IA_Flood_Compendium/tree/main/data/impacts" ' +
-    'target="_blank" rel="noopener">Full dataset + schema</a></div>';
-  section.innerHTML = html;
-
-  var legendHtml = 'Severity: ';
-  for (var s = 0; s <= 3; s++) {
-    legendHtml += '<span style="display:inline-block;width:10px;height:10px;' +
-      'border-radius:50%;background:' + SEV_COLORS[s] +
-      ';margin:0 3px 0 8px"></span>' + s + ' ' + SEV_NAMES[s];
-  }
-  legendHtml += '<br><span style="display:inline-block;width:10px;height:10px;' +
-    'border-radius:50%;background:#fff;border:2px solid #1a4d8f;margin-right:4px">' +
-    '</span>ring = crowdsourced (news or agency), no ring = NOAA narrative';
-  var inund = document.getElementById('inundation-present');
-  var host = inund ? inund.closest('.section') : null;
-  if (host && host.parentNode) {
-    host.parentNode.insertBefore(section, host.nextSibling);
-  } else {
-    var panel = document.getElementById('panel');
-    if (panel) panel.appendChild(section);
-  }
-  document.getElementById('impacts-legend').innerHTML = legendHtml;
-
-  /* ---------- filter wrap ---------- */
-  function impactsPass(ep) {
-    if ((ep.n_impacts || 0) < state.min) return false;
-    if (state.crowdOnly && !ep.has_crowdsource) return false;
-    if (state.street && !ep.__has_street) return false;
-    if (state.severe && !ep.__has_severe) return false;
-    return true;
-  }
-  try {
-    var origFilter = episodePassesFilter;
-    episodePassesFilter = function (ep) {
-      return origFilter(ep) && impactsPass(ep);
-    };
-  } catch (e) { console.warn('impacts addon: filter wrap failed', e); }
-
-  /* ---------- map layer ---------- */
-  var impactsLayer = null;
-  try { impactsLayer = L.layerGroup().addTo(map); }
-  catch (e) { console.warn('impacts addon: no map', e); }
-
-  function updateCounts(nEp, nPts) {
-    var el = document.getElementById('impacts-counts');
-    if (el) el.textContent = nEp + ' of ' + epIds.length +
-      ' episodes pass filters; ' + nPts + ' impact points on map';
-  }
-
-  function renderImpacts() {
-    if (impactsLayer) impactsLayer.clearLayers();
-    var nEp = 0, nPts = 0;
-    epIds.forEach(function (id) {
-      var ep = eps[id];
-      var ok = true;
-      try { ok = episodePassesFilter(ep); } catch (e) {}
-      if (!ok) return;
-      nEp += 1;
-      if (!state.show || !ep.impact_points || !ep.impact_points.length) return;
-      ep.impact_points.forEach(function (p) {
-        if (state.types[p.t] === false) return;
-        nPts += 1;
-        if (!impactsLayer) return;
-        var crowd = p.src !== 'noaa_narrative';
-        var m = L.circleMarker([p.lat, p.lon], {
-          radius: crowd ? 6 : 4.5,
-          fillColor: SEV_COLORS[p.sv] || SEV_COLORS[1],
-          fillOpacity: 0.85,
-          color: crowd ? '#1a4d8f' : '#ffffff',
-          weight: crowd ? 2.5 : 1,
-          pane: 'eventsPane'
-        });
-        m.bindTooltip(esc(p.t.replace(/_/g, ' ')) + ' | ' + esc(p.d) +
-          ' | ' + esc(p.dt), { sticky: true });
-        var extra = '';
-        if (p.q) extra += '<br>Quantity: ' + esc(p.q);
-        if (p.cf) extra += (extra ? ' | ' : '<br>') + 'Confidence ' + esc(p.cf);
-        var pop = '<div style="max-width:280px"><b>' +
-          esc(p.t.replace(/_/g, ' ')) + '</b> (severity ' + p.sv +
-          ')<br><i>' + esc(p.d) + '</i> <br>' + esc(p.dt) +
-          ' | episode ' + esc(id) + extra + '<br>' + esc(p.tx || '') +
-          (p.u ? '<br><a href="' + encodeURI(p.u) +
-            '" target="_blank" rel="noopener">source</a>'
-            : '<br>Source: NOAA Storm Events narrative') + '</div>';
-        m.bindPopup(pop);
-        impactsLayer.addLayer(m);
-      });
-    });
-    updateCounts(nEp, nPts);
-  }
-
-  try {
-    var origRecompute = recompute;
-    recompute = function () { var r = origRecompute(); renderImpacts(); return r; };
-  } catch (e) { console.warn('impacts addon: recompute wrap failed', e); }
-
-  /* ---------- impacts.csv inside per-episode download ZIPs ---------- */
-  function impactsCsvFor(epId) {
-    var ep = eps[epId];
-    if (!ep || !ep.impact_points || !ep.impact_points.length) return null;
-    var q = function (v) {
-      v = String(v == null ? '' : v);
-      return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
-    };
-    var rows = ['impact_type,severity,confidence,source_type,date,lat,lon,location,quantity,text,source_url'];
-    ep.impact_points.forEach(function (p) {
-      rows.push([p.t, p.sv, p.cf || '', p.src, p.dt, p.lat, p.lon, p.d,
-        p.q || '', p.tx || '', p.u || 'NOAA Storm Events narrative']
-        .map(q).join(','));
-    });
-    return rows.join('\n');
-  }
-  try {
-    if (typeof addEpisodeToZip === 'function') {
-      var origAddZip = addEpisodeToZip;
-      addEpisodeToZip = function (zip, episodeId, granularity, episodeData) {
-        var r = origAddZip(zip, episodeId, granularity, episodeData);
-        try {
-          var csv = impactsCsvFor(episodeId);
-          if (csv) zip.file('episode_' + episodeId + '/impacts.csv', csv);
-        } catch (e) { console.warn('impacts addon: zip append failed', e); }
-        return r;
-      };
-    }
-  } catch (e) { console.warn('impacts addon: download wrap failed', e); }
-
-  /* ---------- listeners ---------- */
-  function refresh() { try { recompute(); } catch (e) { renderImpacts(); }
-    try { renderMap(); } catch (e) {} }
-
-  function syncUi() {
-    document.getElementById('impacts-show').checked = state.show;
-    document.getElementById('impacts-crowd-only').checked = state.crowdOnly;
-    var slider = document.getElementById('impacts-min');
-    slider.value = state.min;
-    document.getElementById('impacts-min-val').textContent = state.min;
-    var presets = { all: !state.crowdOnly && !state.street && !state.severe && state.min === 0,
-      crowd: state.crowdOnly, street: state.street, severe: state.severe };
-    Array.prototype.forEach.call(
-      document.querySelectorAll('#impacts-presets .imp-chip'), function (c) {
-        var on = presets[c.getAttribute('data-preset')];
-        c.style.background = on ? '#1a4d8f' : '#fff';
-        c.style.color = on ? '#fff' : '#000';
-        c.style.borderColor = on ? '#1a4d8f' : '#bbb';
-      });
-    Array.prototype.forEach.call(
-      document.querySelectorAll('#impacts-type-chips .imp-type'), function (c) {
-        var off = state.types[c.getAttribute('data-type')] === false;
-        c.style.background = off ? '#eee' : '#fff';
-        c.style.color = off ? '#999' : '#000';
-        c.style.textDecoration = off ? 'line-through' : 'none';
-      });
-  }
-
-  document.getElementById('impacts-show').addEventListener('change',
-    function () { state.show = this.checked; renderImpacts(); });
-  document.getElementById('impacts-crowd-only').addEventListener('change',
-    function () { state.crowdOnly = this.checked; syncUi(); refresh(); });
-  document.getElementById('impacts-min').addEventListener('input',
-    function () {
-      state.min = parseInt(this.value, 10) || 0;
-      syncUi(); refresh();
-    });
-  Array.prototype.forEach.call(
-    document.querySelectorAll('#impacts-presets .imp-chip'), function (c) {
-      c.addEventListener('click', function () {
-        var p = c.getAttribute('data-preset');
-        if (p === 'all') { state.crowdOnly = state.street = state.severe = false; state.min = 0; }
-        if (p === 'crowd') state.crowdOnly = !state.crowdOnly;
-        if (p === 'street') state.street = !state.street;
-        if (p === 'severe') state.severe = !state.severe;
-        syncUi(); refresh();
-      });
-    });
-  Array.prototype.forEach.call(
-    document.querySelectorAll('#impacts-type-chips .imp-type'), function (c) {
-      c.addEventListener('click', function () {
-        var t = c.getAttribute('data-type');
-        state.types[t] = state.types[t] === false ? true : false;
-        syncUi(); renderImpacts();
-      });
-    });
-  document.getElementById('impacts-reset').addEventListener('click',
-    function (ev) {
-      ev.preventDefault();
-      state.crowdOnly = state.street = state.severe = false;
-      state.min = 0; state.show = true; state.types = {};
-      syncUi(); refresh();
-    });
-
-  syncUi();
-  try { recompute(); } catch (e) { renderImpacts(); }
-})();
-
-</script>
 <!-- imagery-addon -->
 <script>
 /* Satellite imagery add-on for the Iowa Flood Compendium wizard.
@@ -3464,7 +3395,7 @@ document.getElementById('lb-modal-view-map').addEventListener('click', () => {
             ep.overpasses.forEach(function (o) {
               rows.push([o.t, o.p, o.s, o.v, o.c, o.h, o.w].join(','));
             });
-            zip.file('episode_' + episodeId + '/satellite_overpasses.csv',
+            zip.file(episodeId + '/satellite_overpasses.csv',
               rows.join('\n'));
           }
         } catch (e) { console.warn('imagery addon: zip append failed', e); }
