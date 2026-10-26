@@ -158,7 +158,8 @@ water marks); FEMA (OpenFEMA NFIP claims); USDA RMA (Cause of Loss crop
 insurance indemnities); CDC/ATSDR (Social Vulnerability Index); US Census
 TIGERweb and USGS WBD (boundaries); ESA Copernicus Sentinel-1 and Sentinel-2
 and USGS Landsat via the Element 84 Earth Search STAC catalogue, and Planet
-Labs where a key is supplied; local news outlets credited per record in
+Labs where a key is supplied; Esri Light Gray Canvas and USGS The National
+Map hydrography (website basemap); local news outlets credited per record in
 `data/impacts/sources_news.csv`. All third-party
 data remain under their providers' terms.
 

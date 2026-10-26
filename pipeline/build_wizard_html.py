@@ -612,74 +612,34 @@ const EMBEDDED_EPISODE_DATA_B64 = "__EMBEDDED_EPISODE_DATA_B64__";
 const EMBEDDED_MRMS_GRIDS_B64 = "__EMBEDDED_MRMS_GRIDS_B64__";
 
 const map = L.map('map').setView([42.0, -93.5], 7);
-// Split into two CARTO raster layers instead of one combined 'light_all':
-// 'light_nolabels' underneath everything (base cartography -- rivers,
-// roads, land) and 'light_only_labels' (transparent, town/place names
-// only) in a dedicated top pane above the choropleth/events/MRMS layers,
-// so labels never get buried under the region-count fill. The labels pane
-// gets pointer-events:none (see CSS) so it never blocks clicking a county/
-// watershed polygon underneath it.
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; OpenStreetMap contributors &copy; CARTO', maxZoom: 12
+// Basemap: Esri's keyless Light Gray Canvas, split into a base layer
+// underneath everything and a transparent reference (place names) layer in
+// a dedicated top pane above the choropleth/events/MRMS layers, so labels
+// never get buried under the region-count fill. The labels pane gets
+// pointer-events:none (see CSS) so it never blocks clicking a county/
+// watershed polygon underneath it. (CARTO's basemaps, used until Oct 2026,
+// started requiring an API key and rendered an "API KEY REQUIRED" watermark.)
+const ESRI_CANVAS = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas';
+L.tileLayer(ESRI_CANVAS + '/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors; hydrography: USGS The National Map', maxZoom: 12
 }).addTo(map);
 
-// CARTO's tile set has no separate "water only" layer to stack above the
-// choropleth the way light_only_labels does for text -- so this pulls just
-// the water-colored pixels back out of the SAME light_nolabels tiles
-// (CARTO's CDN sends Access-Control-Allow-Origin: *, so this is allowed)
-// and re-renders them, recolored to a bold blue, in their own pane above
-// the choropleth fill. CARTO Positron renders rivers/lakes as a pale
-// blue-gray (~rgb(212,218,221), calibrated by sampling real tiles) that's
-// reliably distinguishable from the neutral/warm grays used for roads and
-// boundaries by blue channel exceeding red -- every other pixel is left
-// fully transparent.
-const RIVER_HIGHLIGHT_COLOR = [33, 113, 181];
-const RiverHighlightLayer = L.GridLayer.extend({
-  createTile: function (coords, done) {
-    const size = this.getTileSize();
-    const tile = document.createElement('canvas');
-    tile.width = size.x; tile.height = size.y;
-    const ctx = tile.getContext('2d');
-    const sub = ['a', 'b', 'c', 'd'][Math.abs(coords.x + coords.y) % 4];
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0, size.x, size.y);
-      try {
-        const imgData = ctx.getImageData(0, 0, size.x, size.y);
-        const d = imgData.data;
-        for (let i = 0; i < d.length; i += 4) {
-          const r = d[i], b = d[i + 2];
-          const isWater = (b - r) >= 3 && b >= 205 && r >= 190 && r <= 242;
-          if (isWater) {
-            d[i] = RIVER_HIGHLIGHT_COLOR[0]; d[i + 1] = RIVER_HIGHLIGHT_COLOR[1]; d[i + 2] = RIVER_HIGHLIGHT_COLOR[2]; d[i + 3] = 255;
-          } else {
-            d[i + 3] = 0;
-          }
-        }
-        ctx.putImageData(imgData, 0, 0);
-      } catch (e) { /* tile failed to decode -- leave this tile blank rather than erroring the whole layer */ }
-      done(null, tile);
-    };
-    img.onerror = () => done(null, tile);
-    img.src = `https://${sub}.basemaps.cartocdn.com/light_nolabels/${coords.z}/${coords.x}/${coords.y}.png`;
-    return tile;
-  },
-});
-
+// Rivers and lakes drawn in their own pane above the choropleth fill so
+// they stay visible through it: USGS National Map hydrography (NHD), a
+// transparent keyless overlay. Clipped to the actual study area (every
+// county this dataset covers, padded 10%).
 map.createPane('riversPane');
 map.getPane('riversPane').style.zIndex = 410;
 map.getPane('riversPane').style.pointerEvents = 'none';
-// Clipped to the actual study area (every county this dataset covers,
-// padded 10%) rather than the whole world -- otherwise panning away from
-// Iowa keeps highlighting rivers anywhere on the globe for no reason.
 const studyAreaBounds = L.geoJSON(WIZARD_DATA.county_geometry).getBounds().pad(0.1);
-new RiverHighlightLayer({ pane: 'riversPane', maxZoom: 12, tileSize: 256, bounds: studyAreaBounds }).addTo(map);
+L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSHydroCached/MapServer/tile/{z}/{y}/{x}', {
+  pane: 'riversPane', maxZoom: 12, maxNativeZoom: 16, bounds: studyAreaBounds,
+}).addTo(map);
 
 map.createPane('labelsPane');
 map.getPane('labelsPane').style.zIndex = 460;
 map.getPane('labelsPane').style.pointerEvents = 'none';
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+L.tileLayer(ESRI_CANVAS + '/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
   pane: 'labelsPane', maxZoom: 12,
 }).addTo(map);
 
