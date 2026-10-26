@@ -120,8 +120,7 @@ re-downloading: `mrms_hour_cache/`, `flash_ari_hour_cache/`,
 1. Support layers: `pipeline/hwm_archive.py`, `pipeline/svi_data.py`,
    `pipeline/ifc_community_layers.py`, `pipeline/episode_rma_extract.py`
    (needs the RMA Cause of Loss files unzipped into
-   `data/support/rma_cause_of_loss/raw/` first), `pipeline/choropleth_data.py`,
-   `pipeline/sensor_map_data.py`
+   `data/support/rma_cause_of_loss/raw/` first), `pipeline/choropleth_data.py`
 2. Sensors: `pipeline/bulk_sensor_download.py` then
    `pipeline/enrich_sensors_with_county.py`. Per-episode extraction syncs the
    sensor archive from ownCloud and needs `OWNCLOUD_SHARE_TOKEN` set in the
