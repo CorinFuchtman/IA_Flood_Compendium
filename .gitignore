@@ -4,38 +4,31 @@ zipped_data/
 __pycache__/
 *.pyc
 
-# Flood-wizard pipeline: large/regeneratable data caches -- see the .py
-# scripts in AFinal/locations/ to rebuild any of these locally.
-AFinal/locations/sensor_data_wy2021_2025/
-AFinal/locations/mrms_hour_cache/
-AFinal/locations/flash_ari_hour_cache/
-AFinal/locations/episodes/
-AFinal/locations/hwm_archive.csv
-AFinal/locations/*.log
-AFinal/locations/*_log.txt
+# Editor and assistant settings (personal, machine-specific)
+.vscode/
+.idea/
+.claude/
 
-# FLASH ARI raw data pulled manually from RMA's site (see episode_rma_extract.py)
-AFinal/locations/rma_cause_of_loss/raw/
+# Local, regeneratable pipeline caches -- see the scripts in pipeline/ to
+# rebuild any of these (MRMS and FLASH hourly grids, the ownCloud sensor
+# archive, per-episode extracts, the USGS high water mark archive, the imagery
+# overpass query cache).
+cache/
+pipeline/*.log
+pipeline/*_log.txt
 
-# Unrelated GLOBE Observer data (land cover/sky/tree height) not used by
-# episode_rma_extract.py or any other script here -- multi-GB, exceeds
-# GitHub's per-file limit.
-AFinal/locations/rma_cause_of_loss/globe_*.json
+# RMA cause-of-loss raw files pulled manually from RMA's site (see
+# pipeline/episode_rma_extract.py)
+data/support/rma_cause_of_loss/raw/
 
-# Superseded preview/exploration artifacts (replaced by choropleth/wizard.html)
-AFinal/locations/choropleth/preview_*.html
-AFinal/locations/choropleth/sensors_by_huc8.geojson
-AFinal/locations/choropleth/sensors_by_county.geojson
-AFinal/locations/choropleth/sensor_points.geojson
-AFinal/locations/choropleth/embedded_episode_data.b64.txt
-
-# Pre-session pipeline (11) test outputs -- regenerate via the notebook
-AFinal/locations/episode_191899_0_all_outputs.zip
-AFinal/locations/episode_191899_0_inundation_layers.gpkg
-AFinal/locations/episode_191899_0_mrms_precip_total.tif
+# Site build outputs: wizard.html is the pre-publish page written by
+# build_wizard_html.py; the published copy lives in docs/index.html.
+data/site_build/wizard.html
+data/site_build/embedded_episode_data.b64.txt
+data/site_build/preview_*.html
+data/site_build/sensors_by_huc8.geojson
+data/site_build/sensors_by_county.geojson
+data/site_build/sensor_points.geojson
 
 # Impacts module: downloaded gazetteer cache
-AFinal/impacts/data/census_gazetteer_places_ia.txt
-
-# Imagery module: per-episode overpass query cache
-AFinal/imagery/_cache/
+data/impacts/census_gazetteer_places_ia.txt

@@ -9,9 +9,11 @@ Run through this before merging to main or announcing the repository.
 - [ ] Commit the newer wizard generator: docs/index.html was produced by a
       version of the build pipeline (FLASH recurrence, episode_rma_extract.py)
       that is not in the repository yet; Corin should commit it
-- [ ] Remove or archive superseded files: pipeline (9/10/11).ipynb naming,
-      duplicate noaa CSVs, stale noaa_episodes/ folder, personal paths in
-      AFinal/.claude/launch.json and notebook outputs
+- [x] Remove or archive superseded files: old pipeline notebooks, duplicate
+      NOAA CSVs and the stale noaa_episodes/ folder moved to archive/;
+      editor configs with personal paths removed; notebook outputs cleared
+- [ ] Revoke and regenerate the ownCloud share link: the old token is still
+      readable in this public repository's git history
 
 ## Data quality
 

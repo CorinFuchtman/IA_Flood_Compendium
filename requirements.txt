@@ -7,5 +7,9 @@ shapely>=2.0
 cfgrib>=0.9.10
 eccodes>=1.6
 xarray>=2023.1
+# anonymous S3 access to the MRMS and FLASH archives
+s3fs>=2023.1
+# coordinate transforms
+pyproj>=3.5
 # notebooks
 jupyter
